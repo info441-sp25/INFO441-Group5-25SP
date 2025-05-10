@@ -77,17 +77,18 @@ POST  /upload/[datatype] - Upload vocab/defintions and parse by specific files f
 GET /quizletscrape?=url…- Pull vocabulary from a pre-existing quizlet.
 
 
-# Database Schemas
--Crossword  
-	-__id: ObjectId  
-	-title: String  
-	-user: ObjectId (user)
-	-wordList: [{word: String, definition: String}]  
-	-created: Date  
-	-isPublic: Boolean  
+## Database Schemas
+- Crossword  
+	- __id: ObjectId  
+	- title: String  
+	- userId: Number
+	- wordList: [{word: String, definition: String}]  
+	- created: Date  
+	- isPublic: Boolean  
 
--User  
-	-username: String  
-	-createdCrosswords: [ObjectId] (crossword)  
-	-savedCrosswords: [ObjectId] (crossword)  
-	-crosswordHistory: [ObjectId] (crossword)  
+- User  
+	- userId: Number
+	- username: String  
+	- createdCrosswords: [ObjectId] (crossword)  
+	- savedCrosswords: [ObjectId] (crossword)  
+	- crosswordHistory: [ObjectId] (crossword)  
