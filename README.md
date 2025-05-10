@@ -81,7 +81,7 @@ GET /quizletscrape?=url…- Pull vocabulary from a pre-existing quizlet.
 -Crossword  
 	-__id: ObjectId  
 	-title: String  
-	-user: ObjectId (  
+	-user: ObjectId (user)
 	-wordList: [{word: String, definition: String}]  
 	-created: Date  
 	-isPublic: Boolean  
