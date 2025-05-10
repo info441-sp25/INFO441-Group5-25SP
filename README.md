@@ -9,8 +9,11 @@ As developers and students ourselves, we understand the opposite pulls we often 
 # Technical Description
 ## Architectural Diagram
 
+![Architectural Diagram](proposal/Architectual.jpg)
 
 ## Dataflow
+
+![Dataflow](proposal/dataflow.jpg)
 
 
 ## Summary Table with User Stories
