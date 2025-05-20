@@ -6,6 +6,7 @@ import { createProxyMiddleware } from 'http-proxy-middleware'
 import request from 'request'
 
 import usersRouter from './routes/users.js';
+import crosswordsRouter from './routes/crosswords.js'
 
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
@@ -21,6 +22,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
 app.use('/users', usersRouter);
+app.use('/crosswords', crosswordsRouter);
 
 app.use('/*', createProxyMiddleware({
     target: 'http://localhost:4000',
