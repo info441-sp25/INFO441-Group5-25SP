@@ -25,11 +25,11 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/users', usersRouter);
 
-// app.use('/*', createProxyMiddleware({
-//     target: 'http://localhost:4000',
-//     pathRewrite: (path, req) => req.baseUrl,
-//     changeOrigin: true
-// }))
+app.use('/*', createProxyMiddleware({
+    target: 'http://localhost:4000',
+    pathRewrite: (path, req) => req.baseUrl,
+    changeOrigin: true
+}))
 
 app.use((req, res, next) => {
     req.models = models

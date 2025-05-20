@@ -14,7 +14,7 @@ const userSchema = new mongoose.Schema({
     savedCrosswords: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Crossword' }],
 })
 
-models.User = mongoose.model('User', userSchema)
+models.User = mongoose.model('Users', userSchema)
 
 const crosswordSchema = new mongoose.Schema({
     title: { type: String, required: true },
