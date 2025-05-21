@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "cookie-parser": "^1.0.0",
+    "cors": "^2.8.5",
     "crossword-layout-generator": "^0.1.1",
     "debug": "~2.6.9",
     "express": "^4.21.0",

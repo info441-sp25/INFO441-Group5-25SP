@@ -102,5 +102,28 @@ router.post('/create', async (req, res) => {
     }
 });
 
+router.get('/', async (req, res) => {
+    try {
+        const crosswords = await req.models.Crossword.find({ isPublic: true });
+        res.status(200).json(crosswords);
+    } catch(err) {
+        console.log("Error fetching crosswords:", err);
+        res.status(500).json({status: "error", error: "error fetching crosswords"});
+    }
+});
+
+router.get('/:id', async (req, res) => {
+    try {
+        const crossword = await req.models.Crossword.findById(req.params.id);
+        if (!crossword) {
+            res.status(404).json({status: "error", error: "crossword not found"});
+            return;
+        }
+        res.status(200).json(crossword);
+    } catch(err) {
+        console.log("Error fetching crossword:", err);
+        res.status(500).json({status: "error", error: "error fetching crossword"});
+    }
+});
 
 export default router
