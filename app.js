@@ -4,6 +4,7 @@ import cookieParser from 'cookie-parser';
 import logger from 'morgan';
 import { createProxyMiddleware } from 'http-proxy-middleware'
 import request from 'request'
+import session from 'express-session';
 
 import usersRouter from './routes/users.js';
 import crosswordsRouter from './routes/crosswords.js'
@@ -22,16 +23,22 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(session({
+    secret: 'your-secret-key',
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: false } // set to true if using https
+}));
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/users', usersRouter);
 app.use('/crosswords', crosswordsRouter);
 
-app.use('/*', createProxyMiddleware({
-    target: 'http://localhost:4000',
-    pathRewrite: (path, req) => req.baseUrl,
-    changeOrigin: true
-}))
+// app.use('/*', createProxyMiddleware({
+//     target: 'http://localhost:4000',
+//     pathRewrite: (path, req) => req.baseUrl,
+//     changeOrigin: true
+// }))
 
 app.use((req, res, next) => {
     req.models = models

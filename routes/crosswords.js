@@ -1,11 +1,12 @@
 import express from 'express'
 const router = express.Router()
-import crosswordLayoutGenerator from 'crossword-layout-generator'
+import { generateLayout } from 'crossword-layout-generator';
 
 //TODO: Fix potential bugs/edge cases
 router.post('/create', async (req, res) => {
     try {
         if (!req.session.isAuthenticated) {
+            console.log("Session:", req.session);
             res.status(401).json({status: "error", error: "not logged in"})
             return
         }
@@ -19,7 +20,7 @@ router.post('/create', async (req, res) => {
         })
         
         //Generates a crossword layout using backend package
-        const crosswordLayout = crosswordLayoutGenerator(formattedCrosswordInput);
+        const crosswordLayout = generateLayout(formattedCrosswordInput);
         
         const username = req.session.account.username
         const user = await req.models.User.findOne({username}); 
@@ -64,7 +65,34 @@ router.post('/create', async (req, res) => {
 
     //TODO: Save to MongoDB here or in seperate function
     //Include username, title, created_date, and layout (which is crosswordData)
-    
+    const newCrossword = new req.models.Crossword({
+        name: crosswordTitle,
+        creator: {
+            name: username,
+            webUrl: null
+        },
+        date: Date.now(),
+        webPublicationDate: Date.now(),
+        entries: entries,
+        solutionAvailable: true,
+        dateSolutionAvailable: Date.now(),
+        dimensions: {
+            cols: crosswordLayout.cols,
+            rows: crosswordLayout.rows
+        },
+        crosswordType: 'quick',
+        pdf: null,
+        isPublic: false
+    });
+
+    await newCrossword.save();
+
+    await req.models.User.findOneAndUpdate(
+        { username: username },
+        { $push: { createdCrosswords: newCrossword._id } }
+    );
+
+    crosswordData.id = newCrossword._id;
     
     //Sends data to use as prop for front end
     res.status(200).json(crosswordData);
