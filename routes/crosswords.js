@@ -51,7 +51,7 @@ router.post('/create', async (req, res) => {
             },
             date: Date.now(),
             webPublicationDate: Date.now(),
-            entries,
+            entries: entries,
             solutionAvailable: true,
             dateSolutionAvailable: Date.now(),
             dimensions: {
