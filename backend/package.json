@@ -12,7 +12,10 @@
     "debug": "~2.6.9",
     "express": "^4.21.0",
     "http-proxy-middleware": "^3.0.5",
+    "microsoft-identity-express": "^1.0.0-beta",
     "morgan": "~1.9.1",
+    "msal-node": "^0.0.1-security",
+    "msal-node-wrapper": "https://gitpkg.now.sh/kylethayer/ms-identity-javascript-nodejs-tutorial-msal-node-v2-/Common/msal-node-wrapper?main",
     "request": "^2.88.2"
   }
 }
