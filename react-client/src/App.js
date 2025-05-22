@@ -13,9 +13,23 @@ function App () {
   const [user, setUser] = useState(null);
   const [crossswordID, setcrosswordID] = useState("")
 
-  // useEffect(() => {
-  //   //??
-  // });
+  useEffect(() => {
+    console.log("user info***z: " + user)
+    //console.log("crosswordID: " + crosswordID)
+  });
+
+  useEffect(() => {
+          fetch('/users/myIdentity')
+              .then(res => res.json())
+              .then(data => {
+                  if (data.status === "loggedin") {
+                      console.log("user info here" + data.userInfo)
+                      setUser(data.userInfo);
+                  } else {
+                      setUser(null);
+                  }
+              });
+      }, []);
 
   return (
     // <div className = 'container'>
@@ -25,9 +39,9 @@ function App () {
 
     <BrowserRouter>
       <Routes>
-        <Route path='' element={<LogIn onUserFetched={setUser}/>}/>
+        <Route path='' element={<LogIn user={user}/>}/>
 
-        <Route path='form' element={<Form setcrosswordID={setcrosswordID} user={user}/>}/>
+        <Route path='form' element={<Form setcrosswordID={setcrosswordID} user={user} />}/>
 
         {/* <Route path='listcrosswords' element={<ListCrosswords />}/> */}
 

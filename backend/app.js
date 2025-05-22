@@ -17,7 +17,7 @@ const authConfig = {
       'https://login.microsoftonline.com/f6b6dd5b-f02f-441a-99a0-162ac5060bd2',
     clientSecret:
       "",
-    redirectUri: '/form',
+    redirectUri: 'http://localhost:4000/',
   },
   system: {
     loggerOptions: {
@@ -29,6 +29,8 @@ const authConfig = {
     },
   },
 };
+
+console.log(authConfig)
 
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
@@ -53,7 +55,7 @@ app.use(
     saveUninitialized: true,
     cookie: { 
       maxAge: oneDay,
-      sameSite: "none"
+      secure: false
     },
     resave: false,
   })
@@ -73,13 +75,16 @@ app.use(authProvider.authenticate());
 app.use('/users', usersRouter);
 
 app.get('/signin', (req, res, next) => {
+  console.log('signed in!')
   return req.authContext.login({
     postLoginRedirectUri: '/form', // redirect here after login
+    redirectUri: 'http://localhost:4000/'
   })(req, res, next);
 });
 app.get('/signout', (req, res, next) => {
   return req.authContext.logout({
     postLogoutRedirectUri: '/', // redirect here after logout
+    redirectUri: 'http://localhost:4000/'
   })(req, res, next);
 });
 
