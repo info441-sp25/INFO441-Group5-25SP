@@ -9,7 +9,7 @@ await mongoose.connect(process.env.MONGODB_URI)
 console.log("Connected to MongoDB");
 
 const userSchema = new mongoose.Schema({
-    username: { type: String, required: true, unique: true },
+    username: String,
     createdCrosswords: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Crossword' }],
     savedCrosswords: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Crossword' }],
 })
@@ -17,10 +17,10 @@ const userSchema = new mongoose.Schema({
 models.User = mongoose.model('Users', userSchema)
 
 const crosswordSchema = new mongoose.Schema({
-    name: { type: String, required: true },
+    name: String,
     creator: {
-        name: { type: String, required: true },
-        webUrl: { type: String }
+        name: String,
+        webUrl: String,
     },
     date: { type: Date, default: Date.now },
     webPublicationDate: { type: Date, default: Date.now },
@@ -42,11 +42,11 @@ const crosswordSchema = new mongoose.Schema({
     solutionAvailable: { type: Boolean, default: true },
     dateSolutionAvailable: { type: Date, default: Date.now },
     dimensions: {
-        cols: { type: Number, required: true },
-        rows: { type: Number, required: true }
+        cols: Number,
+        rows: Number,
     },
     crosswordType: { type: String, default: 'quick' },
-    pdf: { type: String },
+    pdf: String,
     isPublic: { type: Boolean, default: false }
 })
 
