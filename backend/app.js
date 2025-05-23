@@ -111,11 +111,11 @@ app.get('*', (req, res) => {
 
 app.use(authProvider.interactionErrorHandler());
 
-app.use('/*', createProxyMiddleware({
-    target: 'http://localhost:4000',
-    pathRewrite: (path, req) => req.baseUrl,
-    changeOrigin: true
-}))
+// app.use('/*', createProxyMiddleware({
+//     target: 'http://localhost:4000',
+//     pathRewrite: (path, req) => req.baseUrl,
+//     changeOrigin: true
+// }))
 
 // backend connection to do
 
