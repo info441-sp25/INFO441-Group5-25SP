@@ -2,7 +2,6 @@ import express from 'express'
 const router = express.Router()
 import { generateLayout } from 'crossword-layout-generator';
 
-//TODO: Fix potential bugs/edge cases
 router.post('/create', async (req, res) => {
     try {
         if (!req.session.isAuthenticated) {
@@ -25,12 +24,9 @@ router.post('/create', async (req, res) => {
         })
 
         const username = req.session.account.username
-        const user = "";
-        const number = 0;
-        // const user = await req.models.User.findOne({username}) ; 
-        // const number = (user?.createdCrosswords?.length || 0) + 1;
+        const user = await req.models.User.findOne({username}) ; 
+        const number = (user?.createdCrosswords?.length || 0) + 1;
         
-        //Creates a formatted data prop for front end 
         const entries = crosswordEntries.map((item) => {
         return {
                 id: `${item.position}-${item.orientation}`,
@@ -66,17 +62,14 @@ router.post('/create', async (req, res) => {
             crosswordType: 'quick',
             pdf: null,
 
-    }
-    console.log(crosswordData);
+        }
 
 
     //TODO: Save to MongoDB here or in seperate function
     //Include username, title, created_date, and layout (which is crosswordData)
     
-    
-    //Sends data to use as prop for front end
-    //TODO: Need to change to crosswordID for front end to call from database directly
-    res.status(200).json(crosswordData);
+        //send ID back
+        res.status(200).json(crosswordData);
     } catch(err) {
         console.log("Error: ", err);
         res.status(500).json({status: "error", error: "error"})
