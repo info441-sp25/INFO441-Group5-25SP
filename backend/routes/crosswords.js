@@ -52,7 +52,7 @@ router.post('/create', async (req, res) => {
             },
             date: Date.now(),
             webPublicationDate: Date.now(),
-            entries,
+            entries: entries,
             solutionAvailable: true,
             dateSolutionAvailable: Date.now(),
             dimensions: {
@@ -95,6 +95,7 @@ router.post('/create', async (req, res) => {
     crosswordData.id = newCrossword._id;
     
     //Sends data to use as prop for front end
+    //TODO: Need to change to crosswordID for front end to call from database directly
     res.status(200).json(crosswordData);
     } catch(err) {
         console.log("Error: ", err);
