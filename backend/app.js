@@ -54,23 +54,12 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
 const oneDay = 1000 * 60 * 60 * 24;
-app.use(
-  sessions({
-    secret:
-      'this is some secret key I am making up dsafewanvejr852308rfhowisaelfn',
-    saveUninitialized: true,
-    cookie: { 
-      maxAge: oneDay,
-      secure: false
-    },
-    resave: false,
-  })
-);
-
-// app.post("/auth/redirect", (req, res) => {
-//   req.session.user = { name: profile.displayName, email: profile.email };
-//   res.redirect("/"); // postLoginRedirectUri
-// });
+app.use(sessions({
+  secret: "this is some secret key for INFO 441 Final Project",
+  saveUninitialized: true,
+  cookie: { maxAge: oneDay },
+  resave: false
+}))
 
 const authProvider = await WebAppAuthProvider.WebAppAuthProvider.initialize(
   authConfig
@@ -87,14 +76,12 @@ app.get('/signin', (req, res, next) => {
   console.log('signed in!')
   return req.authContext.login({
     postLoginRedirectUri: '/form', // redirect here after login
-    // redirectUri: 'http://localhost:4000/'
   })(req, res, next);
 });
 
 app.get('/signout', (req, res, next) => {
   return req.authContext.logout({
     postLogoutRedirectUri: '/', // redirect here after logout
-    // redirectUri: 'http://localhost:4000/'
   })(req, res, next);
 });
 
@@ -108,12 +95,6 @@ app.get('*', (req, res) => {
 });
 
 app.use(authProvider.interactionErrorHandler());
-
-// app.use('/*', createProxyMiddleware({
-//     target: 'http://localhost:4000',
-//     pathRewrite: (path, req) => req.baseUrl,
-//     changeOrigin: true
-// }))
 
 // backend connection to do
 
