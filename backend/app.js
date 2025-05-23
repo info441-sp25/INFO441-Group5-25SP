@@ -72,6 +72,9 @@ app.use((req, res, next) => {
   next()
 })
 
+app.use('/users', usersRouter);
+app.use('/crosswords', crosswordsRouter);
+
 app.get('/signin', (req, res, next) => {
   console.log('signed in!')
   return req.authContext.login({
@@ -85,14 +88,11 @@ app.get('/signout', (req, res, next) => {
   })(req, res, next);
 });
 
-app.use('/users', usersRouter);
-app.use('/crosswords', crosswordsRouter);
+app.use(express.static(path.join(__dirname, '../react-client/build')));
 
-app.use(express.static(path.join(__dirname, '../react-client/build')))
-
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../react-client/public', 'index.html'));
-});
+// app.get('*', (req, res) => {
+//   res.sendFile(path.join(__dirname, '../react-client/build', 'index.html'));
+// });
 
 app.use(authProvider.interactionErrorHandler());
 

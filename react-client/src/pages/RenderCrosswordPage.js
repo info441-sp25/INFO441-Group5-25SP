@@ -1,7 +1,8 @@
 import { Crossword } from '@guardian/react-crossword'
-import React from 'react'
+import React, { useState, useEffect } from 'react'
+import { useParams } from 'react-router-dom'
 
-const data = {
+const sampleData = {
 	id: 'crosswords/example/1',
 	number: 1,
 	name: 'Example crossword No 1',
@@ -93,10 +94,50 @@ const data = {
 }
 
 function RenderCrosswordPage() {
+  const { id } = useParams();
+  const [crosswordData, setCrosswordData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchCrossword = async () => {
+      try {
+        if (id === '1') {
+          setCrosswordData(sampleData);
+        } else {
+          const response = await fetch(`http://localhost:4000/crosswords/${id}`);
+          if (!response.ok) {
+            throw new Error('Failed to fetch crossword');
+          }
+          const data = await response.json();
+          setCrosswordData(data);
+        }
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCrossword();
+  }, [id]);
+
+  if (loading) {
+    return <div>Loading crossword...</div>;
+  }
+
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
+
+  if (!crosswordData) {
+    return <div>No crossword found</div>;
+  }
+
   return (
     <div style={{ maxWidth: '500px', margin: '0 auto' }}>
-      <h1>Guardian Crossword Example</h1>
-      <Crossword data={data} />
+      <h1>{crosswordData.name}</h1>
+      <Crossword data={crosswordData} />
     </div>
   );
 }
