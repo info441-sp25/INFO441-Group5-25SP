@@ -1,12 +1,18 @@
 import mongoose from 'mongoose';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const models = {}
 
 console.log("Trying to connect to MongoDB");
-
-await mongoose.connect(process.env.MONGODB_URI)
-
-console.log("Connected to MongoDB");
+try {
+    await mongoose.connect(process.env.MONGODB_URI);
+    console.log("Connected to MongoDB");
+} catch (error) {
+    console.error("MongoDB connection error:", error);
+    process.exit(1);
+}
 
 const userSchema = new mongoose.Schema({
     username: String,

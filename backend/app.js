@@ -13,12 +13,10 @@ import crosswordsRouter from './routes/crosswords.js'
 
 const authConfig = {
   auth: {
-    clientId: '9cf79576-bc82-45d9-addc-4e91791e0414',
-    authority:
-      'https://login.microsoftonline.com/f6b6dd5b-f02f-441a-99a0-162ac5060bd2',
-    clientSecret:
-      "",
-    redirectUri: 'http://localhost:4000/',
+    clientId: process.env.AZURE_CLIENT_ID,
+    authority: process.env.AZURE_AUTHORITY,
+    clientSecret: process.env.AZURE_CLIENT_SECRET,
+    redirectUri: "http://localhost:3000/redirect"
   },
   system: {
     loggerOptions: {
