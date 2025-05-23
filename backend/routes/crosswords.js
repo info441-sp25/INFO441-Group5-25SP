@@ -1,6 +1,6 @@
 import express from 'express'
 const router = express.Router()
-import crosswordLayoutGenerator from 'crossword-layout-generator'
+import { generateLayout } from 'crossword-layout-generator';
 
 //TODO: Fix potential bugs/edge cases
 router.post('/create', async (req, res) => {
@@ -9,24 +9,29 @@ router.post('/create', async (req, res) => {
             res.status(401).json({status: "error", error: "not logged in"})
             return
         }
-        //Inputted information from user
+
         const crosswordInput = req.body.data.words
         const crosswordTitle = req.body.data.title
         
-        //Formats data to match backend package
         const formattedCrosswordInput = crosswordInput.map(item => {
             return {"clue": item.definition, "answer": item.term}
         })
         
-        //Generates a crossword layout using backend package
-        const crosswordLayout = crosswordLayoutGenerator(formattedCrosswordInput);
-        
+        const crosswordLayout = generateLayout(formattedCrosswordInput);
+        console.log(crosswordLayout);
+
+        const crosswordEntries = crosswordLayout.result.filter(word => {
+            return word.orientation !== 'none'
+        })
+
         const username = req.session.account.username
-        const user = await req.models.User.findOne({username}); 
-        const number = (user?.createdCrosswords?.length || 0) + 1;
+        const user = "";
+        const number = 0;
+        // const user = await req.models.User.findOne({username}) ; 
+        // const number = (user?.createdCrosswords?.length || 0) + 1;
         
         //Creates a formatted data prop for front end 
-        const entries = crosswordLayout.result.map((item) => {
+        const entries = crosswordEntries.map((item) => {
         return {
                 id: `${item.position}-${item.orientation}`,
                 number: item.position,
@@ -35,7 +40,7 @@ router.post('/create', async (req, res) => {
                 direction: item.orientation,
                 length: item.answer.length,
                 group: [`${item.position}-${item.orientation}`],
-                position: {x: item.startx, y: item.starty},
+                position: {x: item.startx - 1, y: item.starty - 1},
                 separatorLocations: {},
                 solution: item.answer.toUpperCase()
             }
@@ -56,11 +61,14 @@ router.post('/create', async (req, res) => {
             dateSolutionAvailable: Date.now(),
             dimensions: {
                 cols: crosswordLayout.cols,
-                rows: crosswordLayout.rows
+                rows: crosswordLayout.rows,
             },
             crosswordType: 'quick',
             pdf: null,
+
     }
+    console.log(crosswordData);
+
 
     //TODO: Save to MongoDB here or in seperate function
     //Include username, title, created_date, and layout (which is crosswordData)
