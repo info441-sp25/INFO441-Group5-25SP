@@ -70,7 +70,6 @@ function App() {
 	}, []);
 
 
-
 	if (loading) return <div>Loading crossword...</div>;
 	if (error) return <div>Error: {error}</div>;
 	if (!crossword) return <div>No crossword available</div>;

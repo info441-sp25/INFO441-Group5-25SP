@@ -85,22 +85,22 @@ app.use((req, res, next) => {
   next()
 })
 
-app.use('/users', usersRouter);
-
 app.get('/signin', (req, res, next) => {
   console.log('signed in!')
   return req.authContext.login({
     postLoginRedirectUri: '/form', // redirect here after login
-    redirectUri: 'http://localhost:4000/'
-  })(req, res, next);
-});
-app.get('/signout', (req, res, next) => {
-  return req.authContext.logout({
-    postLogoutRedirectUri: '/', // redirect here after logout
-    redirectUri: 'http://localhost:4000/'
+    // redirectUri: 'http://localhost:4000/'
   })(req, res, next);
 });
 
+app.get('/signout', (req, res, next) => {
+  return req.authContext.logout({
+    postLogoutRedirectUri: '/', // redirect here after logout
+    // redirectUri: 'http://localhost:4000/'
+  })(req, res, next);
+});
+
+app.use('/users', usersRouter);
 app.use('/crosswords', crosswordsRouter);
 
 app.use(express.static(path.join(__dirname, '../react-client/build')))
