@@ -7,6 +7,8 @@ import LogIn from './pages/LogIn.js'
 import Form from './pages/Form.js';
 import SignIn from './components/SignIn.js';
 import RenderCrosswordPage from './pages/RenderCrosswordPage.js'
+import ViewCrosswords from './pages/ViewCrosswords.js';
+import Header from './components/Header.js';
 
 
 function App () {
@@ -38,6 +40,7 @@ function App () {
     // </div>
 
     <BrowserRouter>
+      <Header />
       <Routes>
         <Route path='' element={<LogIn user={user}/>}/>
 
@@ -45,7 +48,13 @@ function App () {
 
         {/* <Route path='listcrosswords' element={<ListCrosswords />}/> */}
 
-        <Route path='' element={<RenderCrosswordPage />}/>
+        {/* <Route path='' element={<RenderCrosswordPage />}/> */}
+
+        {/* <Route path='rendercrossword/:crosswordID' element={<RenderCrossword crosswordID={crosswordID}/>}/> */}
+
+        <Route path='/crosswords/user/:user' element={<ViewCrosswords />}/>
+
+        <Route path='/crosswords/:id' element={<RenderCrosswordPage />}/>
 
         {/* <Route path='rendercrossword/:crosswordID' element={<RenderCrossword crosswordID={crosswordID}/>}/> */}
 
