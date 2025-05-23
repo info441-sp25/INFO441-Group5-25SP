@@ -5,6 +5,7 @@ import logger from 'morgan';
 import { createProxyMiddleware } from 'http-proxy-middleware'
 import request from 'request'
 import sessions from 'express-session'
+import cors from 'cors';
 
 import WebAppAuthProvider from 'msal-node-wrapper'
 import usersRouter from './routes/users.js';
@@ -34,6 +35,8 @@ console.log(authConfig)
 
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
+
+import models from './models.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -72,6 +75,11 @@ const authProvider = await WebAppAuthProvider.WebAppAuthProvider.initialize(
 
 app.use(authProvider.authenticate());
 
+app.use((req, res, next) => {
+  req.models = models
+  next()
+})
+
 app.use('/users', usersRouter);
 
 app.get('/signin', (req, res, next) => {
@@ -93,16 +101,16 @@ app.use('/crosswords', crosswordsRouter);
 app.use(express.static(path.join(__dirname, '../react-client/build')))
 
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../react-client/build', 'index.html'));
+  res.sendFile(path.join(__dirname, '../react-client/public', 'index.html'));
 });
 
 app.use(authProvider.interactionErrorHandler());
 
-// app.use('/*', createProxyMiddleware({
-//     target: 'http://localhost:4000',
-//     pathRewrite: (path, req) => req.baseUrl,
-//     changeOrigin: true
-// }))
+app.use('/*', createProxyMiddleware({
+    target: 'http://localhost:4000',
+    pathRewrite: (path, req) => req.baseUrl,
+    changeOrigin: true
+}))
 
 // backend connection to do
 
