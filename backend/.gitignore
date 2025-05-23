@@ -2,3 +2,4 @@
 *.vs/
 *.DS_Storeo
 .DS_Store
+.env
