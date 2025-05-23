@@ -38,11 +38,12 @@ function App() {
 		const fetchCrossword = async () => {
 			try {
 				console.log('Fetching crossword...');
-				const response = await fetch('/crosswords/682f6a2e78bd1e75ea73f6c1', {
+				const response = await fetch('http://localhost:4000/crosswords/682f6a2e78bd1e75ea73f6c1', {
 					headers: {
 						'Accept': 'application/json',
 						'Content-Type': 'application/json'
-					}
+					},
+					credentials: 'include'
 				});
 				
 				console.log('Response status:', response.status);

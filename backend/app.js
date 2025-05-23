@@ -45,6 +45,11 @@ var app = express();
 
 app.enable('trust proxy');
 
+app.use(cors({
+    origin: 'http://localhost:3000',
+    credentials: true
+}));
+
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -113,8 +118,5 @@ app.use('/*', createProxyMiddleware({
 }))
 
 // backend connection to do
-
-const PORT = process.env.PORT || 4000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 
 export default app;
