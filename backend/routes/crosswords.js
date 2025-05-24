@@ -111,20 +111,6 @@ router.post('/create', async (req, res) => {
         }
     });
 
-    router.get('/:id', async (req, res) => {
-        try {
-            const crossword = await req.models.Crossword.findById(req.params.id);
-            if (!crossword) {
-                res.status(404).json({status: "error", error: "crossword not found"});
-                return;
-            }
-            res.status(200).json(crossword);
-        } catch(err) {
-            console.log("Error fetching crossword:", err);
-            res.status(500).json({status: "error", error: "error fetching crossword"});
-        }
-    });
-
     router.get('/user', async (req, res) => {
         try {
             if (!req.session.isAuthenticated) {
@@ -147,6 +133,22 @@ router.post('/create', async (req, res) => {
         } catch(err) {
             res.status(500).json({status: "error", error: "error"})
         }
-    })
+    })    
+
+    router.get('/:id', async (req, res) => {
+        try {
+            console.log("i made it to backend: " + req.params.id)
+            const crossword = await req.models.Crossword.findById(req.params.id);
+            console.log("i got a crossword? " + crossword)
+            if (!crossword) {
+                res.status(404).json({status: "error", error: "crossword not found"});
+                return;
+            }
+            res.status(200).json(crossword);
+        } catch(err) {
+            console.log("Error fetching crossword:", err);
+            res.status(500).json({status: "error", error: "error fetching crossword"});
+        }
+    });
 
 export default router
