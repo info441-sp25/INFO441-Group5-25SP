@@ -101,28 +101,52 @@ router.post('/create', async (req, res) => {
     }
 });
 
-router.get('/', async (req, res) => {
-    try {
-        const crosswords = await req.models.Crossword.find({ isPublic: true });
-        res.status(200).json(crosswords);
-    } catch(err) {
-        console.log("Error fetching crosswords:", err);
-        res.status(500).json({status: "error", error: "error fetching crosswords"});
-    }
-});
-
-router.get('/:id', async (req, res) => {
-    try {
-        const crossword = await req.models.Crossword.findById(req.params.id);
-        if (!crossword) {
-            res.status(404).json({status: "error", error: "crossword not found"});
-            return;
+    router.get('/', async (req, res) => {
+        try {
+            const crosswords = await req.models.Crossword.find({ isPublic: true });
+            res.status(200).json(crosswords);
+        } catch(err) {
+            console.log("Error fetching crosswords:", err);
+            res.status(500).json({status: "error", error: "error fetching crosswords"});
         }
-        res.status(200).json(crossword);
-    } catch(err) {
-        console.log("Error fetching crossword:", err);
-        res.status(500).json({status: "error", error: "error fetching crossword"});
-    }
-});
+    });
+
+    router.get('/:id', async (req, res) => {
+        try {
+            const crossword = await req.models.Crossword.findById(req.params.id);
+            if (!crossword) {
+                res.status(404).json({status: "error", error: "crossword not found"});
+                return;
+            }
+            res.status(200).json(crossword);
+        } catch(err) {
+            console.log("Error fetching crossword:", err);
+            res.status(500).json({status: "error", error: "error fetching crossword"});
+        }
+    });
+
+    router.get('/user', async (req, res) => {
+        try {
+            if (!req.session.isAuthenticated) {
+                res.status(401).json({status: "error", error: "Not logged in"})
+                return
+            }
+            const username = req.query.user
+    
+            const user = await req.models.User.findOne({'username': username})
+            
+            const userCrosswords = user.savedCrosswords;
+            const previews = userCrosswords.map(item => {
+                return {
+                    title: item.name,
+                    created_date: item.created_date,
+                    _id: item._id
+                }
+            })
+            res.status(200).json(previews);
+        } catch(err) {
+            res.status(500).json({status: "error", error: "error"})
+        }
+    })
 
 export default router
