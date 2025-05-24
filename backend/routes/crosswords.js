@@ -5,6 +5,7 @@ import { generateLayout } from 'crossword-layout-generator';
 router.post('/create', async (req, res) => {
     try {
         if (!req.session.isAuthenticated) {
+            console.log("Session:", req.session);
             res.status(401).json({status: "error", error: "not logged in"})
             return
         }
@@ -17,7 +18,6 @@ router.post('/create', async (req, res) => {
         })
         
         const crosswordLayout = generateLayout(formattedCrosswordInput);
-        console.log(crosswordLayout);
 
         const crosswordEntries = crosswordLayout.result.filter(word => {
             return word.orientation !== 'none'
@@ -64,11 +64,36 @@ router.post('/create', async (req, res) => {
 
         }
 
+        const newCrossword = new req.models.Crossword({
+            name: crosswordTitle,
+            creator: {
+                name: username,
+                webUrl: null
+            },
+            date: Date.now(),
+            webPublicationDate: Date.now(),
+            entries: entries,
+            solutionAvailable: true,
+            dateSolutionAvailable: Date.now(),
+            dimensions: {
+                cols: crosswordLayout.cols,
+                rows: crosswordLayout.rows
+            },
+            crosswordType: 'quick',
+            pdf: null,
+            isPublic: false
+        });
 
-    //TODO: Save to MongoDB here or in seperate function
-    //Include username, title, created_date, and layout (which is crosswordData)
-    
-        //send ID back
+        await newCrossword.save();
+
+        await req.models.User.findOneAndUpdate(
+            { username: username },
+            { $push: { createdCrosswords: newCrossword._id } }
+        );
+
+        crosswordData.id = newCrossword._id;
+        
+        //Sends data to use as prop for front end
         res.status(200).json(crosswordData);
     } catch(err) {
         console.log("Error: ", err);
@@ -76,5 +101,28 @@ router.post('/create', async (req, res) => {
     }
 });
 
+router.get('/', async (req, res) => {
+    try {
+        const crosswords = await req.models.Crossword.find({ isPublic: true });
+        res.status(200).json(crosswords);
+    } catch(err) {
+        console.log("Error fetching crosswords:", err);
+        res.status(500).json({status: "error", error: "error fetching crosswords"});
+    }
+});
+
+router.get('/:id', async (req, res) => {
+    try {
+        const crossword = await req.models.Crossword.findById(req.params.id);
+        if (!crossword) {
+            res.status(404).json({status: "error", error: "crossword not found"});
+            return;
+        }
+        res.status(200).json(crossword);
+    } catch(err) {
+        console.log("Error fetching crossword:", err);
+        res.status(500).json({status: "error", error: "error fetching crossword"});
+    }
+});
 
 export default router
