@@ -24,7 +24,7 @@ function Header() {
   return (
     <div>
       {username && (
-        <Link to={`/crosswords/user/${username}`} 
+        <Link to={`/viewcrosswords/user/${username}`} 
         style={{
             width: '100%',
             display: 'flex',

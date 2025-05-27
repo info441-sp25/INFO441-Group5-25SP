@@ -120,11 +120,12 @@ router.post('/create', async (req, res) => {
             const username = req.query.user
     
             const user = await req.models.User.findOne({'username': username})
-
+            console.log(user)
             if (!user) {
-                return
+                return res.status(200).json([]);
             } else {
-                const userCrosswords = user.savedCrosswords;
+                const userCrosswords = user.populate('savedCrosswords');
+                console.log(userCrosswords);
                 const previews = userCrosswords.map(item => {
                     return {
                         title: item.name,
@@ -132,6 +133,7 @@ router.post('/create', async (req, res) => {
                         _id: item._id
                     }
                 })
+                console.log(previews);
                 res.status(200).json(previews);
             }
         } catch(err) {
