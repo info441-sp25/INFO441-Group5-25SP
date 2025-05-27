@@ -11,7 +11,8 @@ function LogIn({user}) {
     };
 
     return (
-    <div>
+    <div className="logPageContainer" >
+      <h1>Title</h1>
       {user ? (
         <button onClick={handleLogout}>
           LOGOUT
