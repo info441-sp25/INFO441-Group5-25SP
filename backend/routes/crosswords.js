@@ -118,18 +118,17 @@ router.post('/create', async (req, res) => {
                 return
             }
             const username = req.query.user
-    
-            const user = await req.models.User.findOne({'username': username})
-            console.log(user)
+
+            const user = await req.models.User.findOne({'username': username}).populate('savedCrosswords')
+            console.log(user.savedCrosswords)
+
             if (!user) {
                 return res.status(200).json([]);
             } else {
-                const userCrosswords = user.populate('savedCrosswords');
-                console.log(userCrosswords);
-                const previews = userCrosswords.map(item => {
+                const previews = user.savedCrosswords.map(item => {
                     return {
-                        title: item.name,
-                        created_date: item.created_date,
+                        title: item.title,
+                        created_date: item.date,
                         _id: item._id
                     }
                 })
@@ -137,7 +136,8 @@ router.post('/create', async (req, res) => {
                 res.status(200).json(previews);
             }
         } catch(err) {
-            res.status(500).json({status: "error", error: "error"})
+            console.log(err);
+            res.status(500).json({status: "error", error: "error in /user"})
         }
     })    
 
