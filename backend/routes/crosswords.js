@@ -120,16 +120,20 @@ router.post('/create', async (req, res) => {
             const username = req.query.user
     
             const user = await req.models.User.findOne({'username': username})
-            
-            const userCrosswords = user.savedCrosswords;
-            const previews = userCrosswords.map(item => {
-                return {
-                    title: item.name,
-                    created_date: item.created_date,
-                    _id: item._id
-                }
-            })
-            res.status(200).json(previews);
+
+            if (!user) {
+                return
+            } else {
+                const userCrosswords = user.savedCrosswords;
+                const previews = userCrosswords.map(item => {
+                    return {
+                        title: item.name,
+                        created_date: item.created_date,
+                        _id: item._id
+                    }
+                })
+                res.status(200).json(previews);
+            }
         } catch(err) {
             res.status(500).json({status: "error", error: "error"})
         }
