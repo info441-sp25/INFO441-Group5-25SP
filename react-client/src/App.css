@@ -45,3 +45,7 @@
   height: 100vh;
   width: 100vw;
 }
+
+.formContainer {
+  margin: 10px;
+}
