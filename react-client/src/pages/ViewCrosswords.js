@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
-//add defense for unlogged users
 function ViewCrosswords(){
     const[crosswords, setCrosswords] = useState([]);
     const navigate = useNavigate();
@@ -23,7 +22,13 @@ function ViewCrosswords(){
     return (
         <div>
             <h2>{user}'s Crosswords</h2>
-            <div>
+            <div
+                style={{
+                    display: 'flex',
+                    gap:'1rem',
+                    alignItems: 'center'
+                }}
+            >
                 {crosswords.length === 0 ? (
                     <p>No crosswords to display.</p>
                 ) : (
@@ -31,9 +36,23 @@ function ViewCrosswords(){
                         <div 
                             key={crossword._id} 
                             onClick={() => navigate(`/rendercrosswords/${crossword._id}`)}
+                            style={{
+                                display: 'flex',
+                                flexDirection: 'column',
+                                padding: '1rem',
+                                cursor: 'pointer'
+                            }}
                         >
-                            <h3>{crossword.title}</h3>
-                            <img src="/preview_image.png" alt="crossword preview" />
+                            <p>{crossword.title || 'Crossword'}</p>
+                            <img 
+                                src="/preview_image.png" 
+                                alt="crossword preview"
+                                style={{
+                                    width: '8rem',
+                                    height: '8rem',
+                                    objectFit: 'cover'
+                                }} 
+                            />
                             <p>{new Date(crossword.created_date).toLocaleDateString()}</p>
                         </div>
                     ))   
