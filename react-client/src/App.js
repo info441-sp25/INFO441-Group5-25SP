@@ -9,6 +9,7 @@ import SignIn from './components/SignIn.js';
 import RenderCrosswordPage from './pages/RenderCrosswordPage.js'
 import ViewCrosswords from './pages/ViewCrosswords.js';
 import Header from './components/Header.js';
+import CreateCrossword from './pages/CreateCrossword.js';
 
 function App() {
 	const [user, setUser] = useState(null);
@@ -52,6 +53,10 @@ function App() {
 			{/* <Route path='' element={<RenderCrosswordPage />}/> */}
 	
 			{/* <Route path='rendercrossword/:crosswordID' element={<RenderCrossword crosswordID={crosswordID}/>}/> */}
+
+			<Route path='/createcrossword' element={<CreateCrossword user={ user }/>}/>
+			
+			<Route path="*" element={<Form setcrosswordID={setcrosswordID} user={user} />}/>
 	
 		  </Routes>
 		</BrowserRouter>

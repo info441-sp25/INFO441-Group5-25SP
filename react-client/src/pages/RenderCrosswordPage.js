@@ -136,10 +136,19 @@ function RenderCrosswordPage() {
     return <div>No crossword found</div>;
   }
 
+  const crosswordWithoutSolutions = {
+    ...crosswordData,
+    entries: crosswordData.entries.map(entry => {
+      const { solution, ...entryWithoutSolution } = entry;
+      return entryWithoutSolution;
+    })
+  };
+
   return (
     <div style={{ maxWidth: '500px', margin: '0 auto' }}>
       <h1>{crosswordData.name}</h1>
-      <Crossword data={crosswordData} />
+      {/* <Crossword data={crosswordData} /> */}
+      <Crossword data={crosswordWithoutSolutions} />
     </div>
   );
 }

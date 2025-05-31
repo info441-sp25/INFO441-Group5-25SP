@@ -14,6 +14,8 @@ function Form({ user }) {
                 <p>Not logged in (or internal error)</p>
             )}
             <a href='/rendercrosswords/1'>crossword?</a>
+            <br/>
+            <a href='/createcrossword'>Create crossword</a>
         </div>
     );
 }
