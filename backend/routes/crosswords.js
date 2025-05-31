@@ -93,7 +93,6 @@ router.post('/create', async (req, res) => {
 
         crosswordData.id = newCrossword._id;
         
-        //Sends data to use as prop for front end
         res.status(200).json(crosswordData);
     } catch(err) {
         console.log("Error: ", err);
@@ -113,25 +112,26 @@ router.post('/create', async (req, res) => {
 
     router.get('/user', async (req, res) => {
         try {
-            if (!req.session.isAuthenticated) {
-                res.status(401).json({status: "error", error: "Not logged in"})
-                return
-            }
             const username = req.query.user
-    
-            const user = await req.models.User.findOne({'username': username})
-            
-            const userCrosswords = user.savedCrosswords;
-            const previews = userCrosswords.map(item => {
-                return {
-                    title: item.name,
-                    created_date: item.created_date,
-                    _id: item._id
-                }
-            })
-            res.status(200).json(previews);
+
+            const user = await req.models.User.findOne({'username': username}).populate('savedCrosswords')
+
+            if (!user) {
+                return res.status(200).json([]);
+            } else {
+                const previews = user.savedCrosswords.map(item => {
+                    return {
+                        title: item.name,
+                        created_date: item.date,
+                        _id: item._id
+                    }
+                })
+                console.log(previews);
+                res.status(200).json(previews);
+            }
         } catch(err) {
-            res.status(500).json({status: "error", error: "error"})
+            console.log(err);
+            res.status(500).json({status: "error", error: "error in /user"})
         }
     })    
 
