@@ -16,7 +16,7 @@ const authConfig = {
     clientId: process.env.AZURE_CLIENT_ID,
     authority: process.env.AZURE_AUTHORITY,
     clientSecret: process.env.AZURE_CLIENT_SECRET,
-    redirectUri: "http://localhost:3000/redirect"
+    redirectUri: "/redirect"
   },
   system: {
     loggerOptions: {
@@ -75,25 +75,23 @@ app.use((req, res, next) => {
 app.get('/signin', (req, res, next) => {
   console.log('signed in!')
   return req.authContext.login({
-    postLoginRedirectUri: '/form', // redirect here after login
-    redirectUri: 'http://localhost:3000'
+    postLoginRedirectUri: '/form' // redirect here after login
   })(req, res, next);
 });
 
 app.get('/signout', (req, res, next) => {
   return req.authContext.logout({
-    postLogoutRedirectUri: '/', // redirect here after logout
-    redirectUri: 'http://localhost:3000'
+    postLogoutRedirectUri: '/' // redirect here after logout
   })(req, res, next);
 });
 
 app.use('/users', usersRouter);
 app.use('/crosswords', crosswordsRouter);
 
-app.use(express.static(path.join(__dirname, '../react-client/build')))
+app.use(express.static(path.join(__dirname, '/public/build')))
 
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../react-client/build', 'index.html'));
+  res.sendFile(path.join(__dirname, '/public/build', 'index.html'));
 });
 
 app.use(authProvider.interactionErrorHandler());
