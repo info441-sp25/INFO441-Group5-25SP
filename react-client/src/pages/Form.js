@@ -6,16 +6,25 @@ function Form({ user }) {
     console.log("*****user info:" + user)
 
     return (
-        <div className='formContainer'>
-            <p>hello world!</p>
+        <div className="formContainer">
             {user ? (
-                <p>hi - welcome to the world, {user.name} ({user.username})</p>
+                <div className="welcomeSection">
+                    <h2 className="welcomeTitle">Welcome, {user.name}</h2>
+                    <p className="welcomeSubtitle">@{user.username}</p>
+                </div>
             ) : (
-                <p>Not logged in (or internal error)</p>
+                <div className="errorSection">
+                    <p>Please sign in to continue</p>
+                </div>
             )}
-            <a href='/rendercrosswords/1'>crossword?</a>
-            <br/>
-            <a href='/createcrossword'>Create crossword</a>
+            <div className="actionLinks">
+                <Link to="/rendercrosswords/1" className="actionLink">
+                    View Crossword
+                </Link>
+                <Link to="/createcrossword" className="actionLink">
+                    Create New Crossword
+                </Link>
+            </div>
         </div>
     );
 }
