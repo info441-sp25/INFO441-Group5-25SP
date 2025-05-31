@@ -106,7 +106,7 @@ function RenderCrosswordPage() {
         if (id === '1') {
           setCrosswordData(sampleData);
         } else {
-          const response = await fetch(`http://localhost:3000/crosswords/${id}`);
+          const response = await fetch(`/crosswords/${id}`);
           console.log(response)
           if (!response.ok) {
             throw new Error('Failed to fetch crossword');

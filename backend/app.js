@@ -2,10 +2,7 @@ import express from 'express';
 import path from 'path';
 import cookieParser from 'cookie-parser';
 import logger from 'morgan';
-import { createProxyMiddleware } from 'http-proxy-middleware'
-import request from 'request'
 import sessions from 'express-session'
-// import cors from 'cors';
 
 import WebAppAuthProvider from 'msal-node-wrapper'
 import usersRouter from './routes/users.js';
@@ -42,11 +39,6 @@ const __dirname = dirname(__filename);
 var app = express();
 
 app.enable('trust proxy');
-
-// app.use(cors({
-//     origin: 'http://localhost:3000',
-//     credentials: true
-// }));
 
 app.use(logger('dev'));
 app.use(express.json());
