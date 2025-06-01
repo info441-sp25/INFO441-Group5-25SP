@@ -8,16 +8,36 @@ router.get('/', function(req, res, next) {
   res.send('respond with a resource');
 });
 
-router.get("/myIdentity", function (req, res, next) {
+router.get("/myIdentity", async function (req, res, next) {
   if(req.session.isAuthenticated) {
-    res.json({
-        status: "loggedin", 
-        userInfo: {
-           name: req.session.account.name,
-           username: req.session.account.username}
-    })
-  }else{
-      res.json({ status: "loggedout" })
+    try {
+   
+      const username = req.session.account.username;
+      let user = await models.User.findOne({ username });
+      
+      if (!user) {
+        user = new models.User({
+          username: username,
+          createdCrosswords: [],
+          savedCrosswords: []
+        });
+        await user.save();
+        console.log('New user created in MongoDB');
+      }
+
+      res.json({
+          status: "loggedin", 
+          userInfo: {
+             name: req.session.account.name,
+             username: req.session.account.username
+          }
+      });
+    } catch (error) {
+      console.error('Error in myIdentity:', error);
+      res.status(500).json({ status: "error", error: "Internal server error" });
+    }
+  } else {
+      res.json({ status: "loggedout" });
   }
 });
 

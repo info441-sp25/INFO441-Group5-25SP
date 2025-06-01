@@ -28,7 +28,7 @@ router.post('/create', async (req, res) => {
         const number = (user?.createdCrosswords?.length || 0) + 1;
         
         const entries = crosswordEntries.map((item) => {
-        return {
+            return {
                 id: `${item.position}-${item.orientation}`,
                 number: item.position,
                 humanNumber: String(item.position),
@@ -61,7 +61,6 @@ router.post('/create', async (req, res) => {
             },
             crosswordType: 'quick',
             pdf: null,
-
         }
 
         const newCrossword = new req.models.Crossword({
@@ -100,55 +99,123 @@ router.post('/create', async (req, res) => {
     }
 });
 
-    router.get('/', async (req, res) => {
-        try {
-            const crosswords = await req.models.Crossword.find({ isPublic: true });
-            res.status(200).json(crosswords);
-        } catch(err) {
-            console.log("Error fetching crosswords:", err);
-            res.status(500).json({status: "error", error: "error fetching crosswords"});
+router.get('/', async (req, res) => {
+    try {
+        const crosswords = await req.models.Crossword.find({ isPublic: true });
+        res.status(200).json(crosswords);
+    } catch(err) {
+        console.log("Error fetching crosswords:", err);
+        res.status(500).json({status: "error", error: "error fetching crosswords"});
+    }
+});
+
+router.get('/user', async (req, res) => {
+    try {
+        const username = req.query.user
+
+        const user = await req.models.User.findOne({'username': username}).populate('savedCrosswords')
+
+        if (!user) {
+            return res.status(200).json([]);
+        } else {
+            const previews = user.savedCrosswords.map(item => {
+                return {
+                    title: item.name,
+                    created_date: item.date,
+                    _id: item._id
+                }
+            })
+            console.log(previews);
+            res.status(200).json(previews);
         }
-    });
+    } catch(err) {
+        console.log(err);
+        res.status(500).json({status: "error", error: "error in /user"})
+    }
+})
 
-    router.get('/user', async (req, res) => {
-        try {
-            const username = req.query.user
+router.get('/created', async (req, res) => {
+    try {
+        if (!req.session.isAuthenticated) {
+            res.status(401).json({status: "error", error: "not logged in"});
+            return;
+        }
 
-            const user = await req.models.User.findOne({'username': username}).populate('savedCrosswords')
+        const username = req.session.account.username;
+        const user = await req.models.User.findOne({'username': username});
 
-            if (!user) {
-                return res.status(200).json([]);
-            } else {
-                const previews = user.savedCrosswords.map(item => {
-                    return {
-                        title: item.name,
-                        created_date: item.date,
-                        _id: item._id
-                    }
-                })
-                console.log(previews);
-                res.status(200).json(previews);
+        if (!user) {
+            return res.status(200).json([]);
+        }
+
+        const crosswords = await req.models.Crossword.find({
+            _id: { $in: user.createdCrosswords }
+        });
+
+        const data = crosswords.map(item => {
+            return {
+                title: item.name,
+                created_date: item.date,
+                _id: item._id,
+                isPublic: item.isPublic
             }
-        } catch(err) {
-            console.log(err);
-            res.status(500).json({status: "error", error: "error in /user"})
-        }
-    })    
+        });
 
-    router.get('/:id', async (req, res) => {
-        try {
-            console.log("i made it to backend: " + req.params.id)
-            const crossword = await req.models.Crossword.findById(req.params.id);
-            console.log("i got a crossword? " + crossword)
-            if (!crossword) {
-                res.status(404).json({status: "error", error: "crossword not found"});
-                return;
-            }
-            res.status(200).json(crossword);
-        } catch(err) {
-            console.log("Error fetching crossword:", err);
-            res.status(500).json({status: "error", error: "error fetching crossword"});
+        res.status(200).json(data);
+    } catch(err) {
+        console.log(err);
+        res.status(500).json({status: "error", error: "error in /created"});
+    }
+});
+
+router.get('/saved', async (req, res) => {
+    try {
+        if (!req.session.isAuthenticated) {
+            res.status(401).json({status: "error", error: "not logged in"});
+            return;
         }
-    });
+
+        const username = req.session.account.username;
+        const user = await req.models.User.findOne({'username': username});
+
+        if (!user) {
+            return res.status(200).json([]);
+        }
+
+        const crosswords = await req.models.Crossword.find({
+            _id: { $in: user.savedCrosswords }
+        });
+
+        const data = crosswords.map(item => {
+            return {
+                title: item.name,
+                created_date: item.date,
+                _id: item._id,
+                isPublic: item.isPublic
+            }
+        });
+
+        res.status(200).json(data);
+    } catch(err) {
+        console.log(err);
+        res.status(500).json({status: "error", error: "error in /saved"});
+    }
+});
+
+router.get('/:id', async (req, res) => {
+    try {
+        console.log("i made it to backend: " + req.params.id)
+        const crossword = await req.models.Crossword.findById(req.params.id);
+        console.log("i got a crossword? " + crossword)
+        if (!crossword) {
+            res.status(404).json({status: "error", error: "crossword not found"});
+            return;
+        }
+        res.status(200).json(crossword);
+    } catch(err) {
+        console.log("Error fetching crossword:", err);
+        res.status(500).json({status: "error", error: "error fetching crossword"});
+    }
+});
 
 export default router
