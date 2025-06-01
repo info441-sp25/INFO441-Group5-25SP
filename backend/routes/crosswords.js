@@ -136,12 +136,12 @@ router.get('/user', async (req, res) => {
 
 router.get('/created', async (req, res) => {
     try {
-        if (!req.session.isAuthenticated) {
-            res.status(401).json({status: "error", error: "not logged in"});
-            return;
+        const username = req.query.user;
+
+        if (!username) {
+            return res.status(400).json({status: "error", error: "username parameter required"});
         }
 
-        const username = req.session.account.username;
         const user = await req.models.User.findOne({'username': username});
 
         if (!user) {
@@ -170,12 +170,12 @@ router.get('/created', async (req, res) => {
 
 router.get('/saved', async (req, res) => {
     try {
-        if (!req.session.isAuthenticated) {
-            res.status(401).json({status: "error", error: "not logged in"});
-            return;
+        const username = req.query.user;
+
+        if (!username) {
+            return res.status(400).json({status: "error", error: "username parameter required"});
         }
 
-        const username = req.session.account.username;
         const user = await req.models.User.findOne({'username': username});
 
         if (!user) {
