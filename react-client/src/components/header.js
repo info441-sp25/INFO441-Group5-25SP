@@ -21,21 +21,27 @@ function Header() {
     fetchUser();
   }, []);
 
+  const handleLogin = async () => {
+        window.location.href = "/signin";
+    };
+
   return (
-    <div>
-      {username && (
-        <Link to={`/viewcrosswords/user/${username}`} 
-        style={{
-            width: '100%',
-            display: 'flex',
-            justifyContent: 'flex-end', 
-            alignItems: 'center',
-          }}>
+    <div className="headerContainer">
+      <div style={{ flex: 1 }} />
+      <div className="headerActionLinks">
+        {username ? (
+          <Link to={`/viewcrosswords/user/${username}`} className="actionLink">
             {username}
-        </Link>
-      )}
+          </Link>
+        ) : (
+          <Link onClick={handleLogin} className="actionLink">
+            Sign In
+          </Link>
+        )}
+      </div>
     </div>
   );
+  
 }
 
 export default Header;
