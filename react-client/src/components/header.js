@@ -27,6 +27,14 @@ function Header() {
 
   return (
     <div className="headerContainer">
+      <div className="headerLeftLinks">
+        <Link to={'/'} className="actionLink">Front Page</Link>
+        <Link to={'/form'} className="actionLink">Welcome Page(form)</Link>
+          {username ? (
+            <Link to={'/createcrossword'} className="actionLink">Create New Crossword</Link> 
+          ) : null }
+        <Link className="actionLink">View Crosswords</Link> {/* needs to be implemented */}
+      </div>
       <div style={{ flex: 1 }} />
       <div className="headerActionLinks">
         {username ? (
@@ -41,6 +49,7 @@ function Header() {
       </div>
     </div>
   );
+  // also to do: have header collapse into a mobile compatible menu once the window gets to a certain size, but optional.
   
 }
 

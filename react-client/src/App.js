@@ -8,7 +8,7 @@ import Form from './pages/Form.js';
 import SignIn from './components/SignIn.js';
 import RenderCrosswordPage from './pages/RenderCrosswordPage.js'
 import ViewCrosswords from './pages/ViewCrosswords.js';
-import Header from './components/Header.js';
+import Header from './components/header.js';
 import CreateCrossword from './pages/CreateCrossword.js';
 
 function App() {
