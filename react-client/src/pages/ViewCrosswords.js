@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, Link } from 'react-router-dom';
 
 function ViewCrosswords(){
     const[crosswords, setCrosswords] = useState([]);
@@ -58,6 +58,10 @@ function ViewCrosswords(){
                                 }} 
                             />
                             <p>{new Date(crossword.created_date).toLocaleDateString()}</p>
+                            <div className="actionLinks">
+                                <Link to={null} className="actionLink">Edit</Link>
+                                <Link to={null} className="actionLink">Delete</Link>
+                            </div>
                         </div>
                     ))   
                 )}
