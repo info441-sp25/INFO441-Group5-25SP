@@ -134,9 +134,9 @@ router.get('/user', async (req, res) => {
     }
 })
 
-router.get('/created', async (req, res) => {
+router.get('/created/:user', async (req, res) => {
     try {
-        const username = req.query.user;
+        const username = req.params.user;
 
         if (!username) {
             return res.status(400).json({status: "error", error: "username parameter required"});
@@ -168,9 +168,9 @@ router.get('/created', async (req, res) => {
     }
 });
 
-router.get('/saved', async (req, res) => {
+router.get('/saved/:user', async (req, res) => {
     try {
-        const username = req.query.user;
+        const username = req.params.user;
 
         if (!username) {
             return res.status(400).json({status: "error", error: "username parameter required"});
