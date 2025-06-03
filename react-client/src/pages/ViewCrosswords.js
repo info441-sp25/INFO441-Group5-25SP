@@ -19,6 +19,10 @@ function ViewCrosswords(){
         fetchCrosswords()
     }, [user])
     
+    // TODO: get the crossword preview to have a button for edit
+        // - Need to edit the viewcrosswords/user page to show an “edit” button for each crossword
+        // - Links to new page below
+
     return (
         <div>
             <h2>{user}'s Created Crosswords</h2>

@@ -218,4 +218,19 @@ router.get('/:id', async (req, res) => {
     }
 });
 
+router.get('/edit', async (req, res) => {
+    //     - Needs to check that crossword matches the user’s ownership
+    // - Needs to call for the crossword in question
+    // - Needs to scrape for the following details:
+    //     - objectID
+    //     - Title
+    //     - All words in word+definiton pairs
+    // - res.status(200).json(resulted)
+})
+
+router.post('/edit', async (req, res) ={
+    // - Will delete the pre-existing crossword of the same objectID
+    // - Create a new crossword using the existing POST crossword/create
+})
+
 export default router
