@@ -19,7 +19,9 @@ function CreateCrossword({ user }) {
 
     const updateWordPair = (id, field, value) => {
         setWords(words.map(word =>
-            word.id === id ? { ...word, [field]: value } : word
+            word.id === id
+                ? { ...word, [field]: field === 'term' ? value.toUpperCase() : value }
+                : word
         ));
     };
 

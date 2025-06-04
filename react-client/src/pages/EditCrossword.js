@@ -44,7 +44,12 @@ function EditCrossword() {
 
     const updateWordPair = (id, field, value) => {
         setWords(words.map(word =>
-            word.id === id ? { ...word, [field]: value } : word
+            word.id === id
+                ? {
+                    ...word,
+                    [field]: field === 'term' ? value.toUpperCase() : value
+                }
+                : word
         ));
     };
 
@@ -57,7 +62,9 @@ function EditCrossword() {
             return;
         }
 
-        const validWords = words.filter(word => word.term.trim() && word.definition.trim());
+        const uppercaseWords = words.map(word => word.term.toUpperCase())
+
+        const validWords = uppercaseWords.filter(word => word.term.trim() && word.definition.trim());
 
         if (validWords.length === 0) {
             setError('Please add at least one word and definition');

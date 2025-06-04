@@ -11,7 +11,7 @@ function WordDefElem({ word, onUpdate, onRemove, canRemove }) {
                     <input
                         type="text"
                         id={`term${word.id}`}
-                        value={word.term}
+                        value={word.term.toUpperCase()} // always display uppercase
                         onChange={(e) => onUpdate(word.id, 'term', e.target.value)}
                         className="createCrosswordInput"
                         placeholder="Enter a word"
@@ -40,4 +40,4 @@ function WordDefElem({ word, onUpdate, onRemove, canRemove }) {
     );
 }
 
-export default WordDefElem; 
+export default WordDefElem;
