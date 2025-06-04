@@ -14,6 +14,7 @@ router.post('/create', async (req, res) => {
         const crosswordTitle = req.body.data.title
         
         const formattedCrosswordInput = crosswordInput.map(item => {
+            console.log(item)
             return {"clue": item.definition, "answer": item.term}
         })
         
