@@ -62,9 +62,7 @@ function EditCrossword() {
             return;
         }
 
-        const uppercaseWords = words.map(word => word.term.toUpperCase())
-
-        const validWords = uppercaseWords.filter(word => word.term.trim() && word.definition.trim());
+        const validWords = words.filter(word => word.term.trim() && word.definition.trim());
 
         if (validWords.length === 0) {
             setError('Please add at least one word and definition');
