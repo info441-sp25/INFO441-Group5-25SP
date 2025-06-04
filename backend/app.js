@@ -8,6 +8,10 @@ import WebAppAuthProvider from 'msal-node-wrapper'
 import usersRouter from './routes/users.js';
 import crosswordsRouter from './routes/crosswords.js'
 
+import dotenv from 'dotenv';
+dotenv.config();
+console.log("MONGODB_URI:", process.env.MONGODB_URI);
+
 const authConfig = {
   auth: {
     clientId: process.env.AZURE_CLIENT_ID,

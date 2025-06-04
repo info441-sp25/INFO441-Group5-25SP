@@ -285,3 +285,82 @@
   cursor: pointer;
   font-size: 16px;
 }
+
+.searchForm {
+  display: flex;
+  justify-content: center;
+}
+
+.searchInput {
+  padding: 0.8rem 1rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 6px 0px 0px 6px;
+  width: 300px;
+  max-width: 80%;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.searchButton {
+  background-color: #8B7355;
+  color: white;
+  border: none;
+  padding: 0.8rem 1.5rem;
+  border-radius: 0px 6px 6px 0px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.searchButton:hover {
+  background-color: #6B4F3D;
+}
+
+.card-grid {
+  display: flex;
+  flex-wrap: wrap;        
+  gap: 1rem;  
+  margin: 7rem 2rem 7rem 2rem;           
+  justify-content: start; 
+}
+
+.crossword-card {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  width: 200px;           
+}
+
+.crossword-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.card-title {
+  font-size: 1.1rem;
+  font-weight: 500;
+  margin: 0.75rem 0 0.5rem;
+  padding: 0 0.75rem;
+  color: #333;
+  text-align: center;
+}
+
+.card-image {
+  height: 120px;      
+  object-fit: cover;  
+  width: 100%;
+}
+
+.card-date {
+  font-size: 0.85rem;
+  color: #666;
+  margin: 0.5rem 0 1rem;
+  padding: 0 0.75rem;
+  text-align: center;
+}

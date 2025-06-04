@@ -202,6 +202,33 @@ router.get('/saved', async (req, res) => {
     }
 });
 
+router.get('/search/:search', async(req, res) => {
+    console.log("im in search", req.params.search);
+    try {
+        const search = req.params.search;
+        console.log(search);
+        const crosswords = await req.models.Crossword.find({name: { $regex: search, $options: 'i' }});
+
+        if (!crosswords) {
+            return res.status(200).json([]);
+        }
+
+        const data = crosswords.map(item => {
+            return {
+                title: item.name,
+                created_date: item.date,
+                _id: item._id,
+                creator: item.creator.name
+            }
+        });
+
+        res.status(200).json(data);
+    } catch(err) {
+        console.log("Error in /search:", err);
+        res.status(500).json({status: "error", error: "error searching crossword"});
+    }
+})
+
 router.get('/:id', async (req, res) => {
     try {
         console.log("i made it to backend: " + req.params.id)
@@ -218,6 +245,7 @@ router.get('/:id', async (req, res) => {
     }
 });
 
+
 router.get('/edit', async (req, res) => {
     //     - Needs to check that crossword matches the user’s ownership
     // - Needs to call for the crossword in question
@@ -232,5 +260,38 @@ router.post('/edit', async (req, res) => {
     // - Will delete the pre-existing crossword of the same objectID
     // - Create a new crossword using the existing POST crossword/create
 })
+
+// DELETE /crosswords/:id
+router.delete('/:id', async (req, res) => {
+    const { id } = req.params;
+    const user = req.session.account?.username;
+
+    if (!user) {
+        return res.status(401).json({ message: 'Unauthorized: No session user' });
+    }
+
+    try {
+        const crossword = await req.models.Crossword.findById(id);
+        if (!crossword) {
+            return res.status(404).json({ message: 'Crossword not found' });
+        }
+
+        if (crossword.creator.name !== user) {
+            return res.status(403).json({ message: 'Forbidden: You do not own this crossword' });
+        }
+
+        await req.models.Crossword.findByIdAndDelete(id);
+
+        await req.models.User.updateOne(
+            { username: user },
+            { $pull: { createdCrosswords: id } }
+        );
+
+        res.status(200).json({ message: 'Crossword deleted successfully' });
+    } catch (err) {
+        console.error('Error deleting crossword:', err);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
 
 export default router

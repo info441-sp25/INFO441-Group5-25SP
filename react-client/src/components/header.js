@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import Search from './Search.js';
 
 function Header() {
   const [username, setUsername] = useState(null);
@@ -33,7 +34,7 @@ function Header() {
           {username ? (
             <Link to={'/createcrossword'} className="actionLink">Create New Crossword</Link> 
           ) : null }
-        <Link className="actionLink">View Crosswords</Link> {/* needs to be implemented */}
+        <Search />
       </div>
       <div style={{ flex: 1 }} />
       <div className="headerActionLinks">

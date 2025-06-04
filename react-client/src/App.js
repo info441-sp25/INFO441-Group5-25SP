@@ -10,6 +10,7 @@ import RenderCrosswordPage from './pages/RenderCrosswordPage.js'
 import ViewCrosswords from './pages/ViewCrosswords.js';
 import Header from './components/header.js';
 import CreateCrossword from './pages/CreateCrossword.js';
+import SearchCrosswords from './pages/SearchCrosswords.js';
 import EditCrossword from './pages/EditCrossword.js';
 
 function App() {
@@ -35,33 +36,31 @@ function App() {
 
 
 
-	return (
-		// <div className = 'container'>
-		//   <h1 className='title'>Crossword Testing</h1>
-		// </div>
-	
+	return (	
 		<BrowserRouter>
 			<Header />
-		  <Routes>
-			<Route path='' element={<LogIn user={user}/>}/>
-	
-			<Route path='/form' element={<Form setcrosswordID={setcrosswordID} user={user} />}/>
+			<Routes>
+				<Route path='' element={<LogIn user={user}/>}/>
+		
+				<Route path='/form' element={<Form setcrosswordID={setcrosswordID} user={user} />}/>
 
-			<Route path='/viewcrosswords/user/:user' element={<ViewCrosswords />}/>
+				<Route path='/viewcrosswords/user/:user' element={<ViewCrosswords />}/>
 
-        	<Route path='/rendercrosswords/:id' element={<RenderCrosswordPage/>}/>
-	
-			{/* <Route path='' element={<RenderCrosswordPage />}/> */}
-	
-			{/* <Route path='rendercrossword/:crosswordID' element={<RenderCrossword crosswordID={crosswordID}/>}/> */}
+				{/* Needs to always come before rendercrosswords */}
+				<Route path="/search/:search" element={<SearchCrosswords/>} />
 
-			<Route path='/createcrossword' element={<CreateCrossword user={ user }/>}/>
-			
-			<Route path="*" element={<Form setcrosswordID={setcrosswordID} user={user} />}/>
+				<Route path='/rendercrosswords/:id' element={<RenderCrosswordPage/>}/>
+		
+				{/* <Route path='' element={<RenderCrosswordPage />}/> */}
+		
+				{/* <Route path='rendercrossword/:crosswordID' element={<RenderCrossword crosswordID={crosswordID}/>}/> */}
 
-			<Route path="/editcrossword/:id" element={<EditCrossword />} />
-	
-		  </Routes>
+				<Route path='/createcrossword' element={<CreateCrossword user={ user }/>}/>
+
+				<Route path="*" element={<Form setcrosswordID={setcrosswordID} user={user} />}/>
+
+				<Route path="/editcrossword/:id" element={<EditCrossword />} />
+			</Routes>
 		</BrowserRouter>
 	);
 }
