@@ -15,7 +15,7 @@ function EditCrossword() {
             const data = await response.json();
             setTitle(data.name || '');
             const existingWords = data.entries.map((entry) => ({
-                id: Date.now() + Math.random(), // assign a unique id
+                id: Date.now() + Math.random(), 
                 term: entry.solution,
                 definition: entry.clue ? entry.clue.replace(/\s*\(.*\)$/, '') : ''
             }));
