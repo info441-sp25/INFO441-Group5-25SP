@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams, Link } from 'react-router-dom';
 
-function ViewCrosswords(){
+function ViewCrosswords({currentUser}){
     const[crosswords, setCrosswords] = useState([]);
     const navigate = useNavigate();
     const { user } = useParams();
+    const currentUsername = (currentUser ? (currentUser.username) : '')
 
     useEffect(() => {
         async function fetchCrosswords() {
@@ -70,31 +71,36 @@ function ViewCrosswords(){
                             />
                             <p className='card-date'>{new Date(crossword.created_date).toLocaleDateString()}</p>
                             <p className='card-date'>Created By: {crossword.creator || 'Anonymous'}</p>
-                            <div className="actionLinks" style={{ marginTop: '0.5rem' }}>
-                                <Link
-                                    to={`/editcrossword/${crossword._id}`}
-                                    className="actionLink"
-                                    onClick={e => e.stopPropagation()}
-                                >
-                                    Edit
-                                </Link>
-                                <button
-                                    type="button"
-                                    onClick={e => {
-                                        e.stopPropagation();
-                                        handleDelete(crossword._id);
-                                    }}
-                                    style={{
-                                        border: 'none',
-                                        background: 'none',
-                                        padding: 0,
-                                        cursor: 'pointer',
-                                        width: '100%'
-                                    }}
-                                >
-                                    <span className="actionLink">Delete</span>
-                                </button>
-                            </div>
+                            {crossword.creator == currentUsername ? (
+                                <div className="actionLinks" style={{ marginTop: '0.5rem' }}>
+                                    <Link
+                                        to={`/editcrossword/${crossword._id}`}
+                                        className="actionLink"
+                                        onClick={e => e.stopPropagation()}
+                                    >
+                                        Edit
+                                    </Link>
+                                    <button
+                                        type="button"
+                                        onClick={e => {
+                                            e.stopPropagation();
+                                            handleDelete(crossword._id);
+                                        }}
+                                        style={{
+                                            border: 'none',
+                                            background: 'none',
+                                            padding: 0,
+                                            cursor: 'pointer',
+                                            width: '100%'
+                                        }}
+                                    >
+                                        <span className="actionLink">Delete</span>
+                                    </button>
+                                </div>
+                            ) : (
+                                <div/>
+                            )}
+                            
                         </div>
                     ))   
                 )}

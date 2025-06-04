@@ -44,7 +44,7 @@ function App() {
 		
 				<Route path='/form' element={<Form setcrosswordID={setcrosswordID} user={user} />}/>
 
-				<Route path='/viewcrosswords/user/:user' element={<ViewCrosswords />}/>
+				<Route path='/viewcrosswords/user/:user' element={<ViewCrosswords currentUser={user}/>}/>
 
 				{/* Needs to always come before rendercrosswords */}
 				<Route path="/search/:search" element={<SearchCrosswords/>} />
