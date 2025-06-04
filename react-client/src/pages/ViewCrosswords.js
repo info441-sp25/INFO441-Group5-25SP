@@ -52,20 +52,38 @@ function ViewCrosswords(){
                     crosswords.map((crossword) => (
                         <div 
                             key={crossword._id} 
-                            onClick={() => navigate(`/rendercrosswords/${crossword._id}`)}
-                            class="crossword-card"
+                            className="crossword-card"
                         >
-                            <h3 className='card-title'>{crossword.title || 'Crossword'}</h3>
-                            <img src="/preview_image.png" alt="crossword preview" class='card-image' />
+                            <h3
+                                className='card-title'
+                                style={{ cursor: 'pointer' }}
+                                onClick={() => navigate(`/rendercrosswords/${crossword._id}`)}
+                            >
+                                {crossword.title || 'Crossword'}
+                            </h3>
+                            <img
+                                src="/preview_image.png"
+                                alt="crossword preview"
+                                className='card-image'
+                                style={{ cursor: 'pointer' }}
+                                onClick={() => navigate(`/rendercrosswords/${crossword._id}`)}
+                            />
                             <p className='card-date'>{new Date(crossword.created_date).toLocaleDateString()}</p>
                             <p className='card-date'>Created By: {crossword.creator || 'Anonymous'}</p>
                             <div className="actionLinks" style={{ marginTop: '0.5rem' }}>
-                                <Link to={`/editcrossword/${crossword._id}`} className="actionLink">Edit</Link>
+                                <Link
+                                    to={`/editcrossword/${crossword._id}`}
+                                    className="actionLink"
+                                    onClick={e => e.stopPropagation()}
+                                >
+                                    Edit
+                                </Link>
                                 <button
-                                    onClick={(e) => {
-                                        e.stopPropagation()
-                                        handleDelete(crossword._id)}
-                                    }
+                                    type="button"
+                                    onClick={e => {
+                                        e.stopPropagation();
+                                        handleDelete(crossword._id);
+                                    }}
                                     style={{
                                         border: 'none',
                                         background: 'none',
