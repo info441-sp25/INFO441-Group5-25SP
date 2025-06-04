@@ -40,55 +40,67 @@ As developers and students ourselves, we understand the opposite pulls we often 
 
 ## API Endpoints
 
-POST /user/register - Allows users to register a new account.
+GET /signin - Allows users to log into their account.
 
-POST /user/login - Allows users to log into their account.
+GET /logout - Allows users to log out their account.
 
-POST /user/logout - Allows users to log out their account.
+GET /user/:username  - Fetch user's profile info.
 
-GET    /user/:id              - Fetch user's profile info.
+GET /user/myIdentity  - Fetch logged in user and save user to MongoDB (if new).
 
-PUT    /user/:id              - Update user's profile info.
-
-GET    /user/:id/history      - Get user's puzzle-solving history, including those in progress.
-
-GET /user/:id/saved - Get saved crosswords.
 
 
 POST /crossword/create - Create a new crossword puzzle with list of words and corresponding definitions
 
-GET /crossword/:id - Get a specific crossword by ID
+GET /crossword - Get public crosswords
 
-GET /crossword/user/:userId - Get crosswords created by a user
+GET /crossword/created - Get crosswords created by a user
+
+GET /crossword/saved - Get crossword saved by a user
+
+GET /crossword/search/:search - Get crosswords titles matching a search query
+
+GET /crossword/:id - Get a specific crossword by ID
 
 DELETE /crossword/:id - Delete a crossword
 
-PUT    /crossword/:id         - Edit an existing crossword.
-
-GET    /crossword/search      - Search for crosswords by keyword.
-
-POST   /crossword/:id/solve   - Submit a completed crossword attempt’s progress.
-
-
-POST  /upload - Upload file of vocab / definitions
-
-POST  /upload/[datatype] - Upload vocab/defintions and parse by specific files formats
-
-GET /quizletscrape?=url…- Pull vocabulary from a pre-existing quizlet.
+PUT /crossword/:id  - Edit an existing crossword.
 
 
 ## Database Schemas
-- Crossword  
-	- __id: ObjectId  
-	- title: String  
-	- userId: Number
-	- wordList: [{word: String, definition: String}]  
-	- created: Date  
-	- isPublic: Boolean  
 
-- User  
-	- userId: Number
-	- username: String  
-	- createdCrosswords: [ObjectId] (crossword)  
-	- savedCrosswords: [ObjectId] (crossword)  
-	- crosswordHistory: [ObjectId] (crossword)  
+- User
+	- _id: ObjectId
+	- username: String
+	- createdCrosswords: Array of ObjectIds (references Crossword)
+	- savedCrosswords: Array of ObjectIds (references Crossword)
+	
+- Crossword
+	- _id: ObjectId
+	- name: String
+	- creator: String
+		- name: String
+		- webUrl: String
+	- date: Date (default: Date.now)
+	- webPublicationDate: Date (default: Date.now)
+	- entries: Array of objects, each containing:
+		- id: String
+		- number: Number
+		- humanNumber: String
+		- clue: String
+		- direction: String
+		- length: Number
+		- group: Array of Strings
+		- position:
+			- x: Number
+			- y: Number
+		- separatorLocations: Map (String → Object)
+		- solution: String
+	- solutionAvailable: Boolean (default: true)
+	- dateSolutionAvailable: Date (default: Date.now)
+	- dimensions:
+		- cols: Number
+		- rows: Number
+	- crosswordType: String (default: 'quick')
+	- pdf: String 
+	- isPublic: Boolean (default: false)
