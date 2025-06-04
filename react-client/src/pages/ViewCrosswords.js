@@ -18,6 +18,26 @@ function ViewCrosswords(){
         }
         fetchCrosswords()
     }, [user])
+
+    async function handleDelete(crosswordId) {
+        if (!window.confirm('Are you sure you want to delete this crossword?')) return;
+
+        try {
+            const res = await fetch(`/crosswords/${crosswordId}`, {
+                method: 'DELETE'
+            });
+
+            if (res.ok) {
+                setCrosswords((prev) => prev.filter(cw => cw._id !== crosswordId));
+            } else {
+                const result = await res.json();
+                alert(result.message || 'Failed to delete crossword');
+            }
+        } catch (err) {
+            console.error('Error deleting crossword:', err);
+            alert('Server error');
+        }
+    }
     
     // TODO: get the crossword preview to have a button for edit
         // - Need to edit the viewcrosswords/user page to show an “edit” button for each crossword
@@ -58,9 +78,23 @@ function ViewCrosswords(){
                                 }} 
                             />
                             <p>{new Date(crossword.created_date).toLocaleDateString()}</p>
-                            <div className="actionLinks">
-                                <Link to={null} className="actionLink">Edit</Link>
-                                <Link to={null} className="actionLink">Delete</Link>
+                            <div className="actionLinks" style={{ marginTop: '0.5rem' }}>
+                                <Link to={`/editcrossword/${crossword._id}`} className="actionLink">Edit</Link>
+                                <button
+                                    onClick={(e) => {
+                                        e.stopPropagation()
+                                        handleDelete(crossword._id)}
+                                    }
+                                    style={{
+                                        border: 'none',
+                                        background: 'none',
+                                        padding: 0,
+                                        cursor: 'pointer',
+                                        width: '100%'
+                                    }}
+                                >
+                                    <span className="actionLink">Delete</span>
+                                </button>
                             </div>
                         </div>
                     ))   
