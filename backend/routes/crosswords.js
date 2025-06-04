@@ -32,7 +32,7 @@ router.post('/create', async (req, res) => {
                 id: `${item.position}-${item.orientation}`,
                 number: item.position,
                 humanNumber: String(item.position),
-                clue: item.clue.toUpperCase(),
+                clue: item.clue,
                 direction: item.orientation,
                 length: item.answer.length,
                 group: [`${item.position}-${item.orientation}`],
@@ -122,7 +122,8 @@ router.get('/user', async (req, res) => {
                 return {
                     title: item.name,
                     created_date: item.date,
-                    _id: item._id
+                    _id: item._id,
+                    creator: item.creator.name
                 }
             })
             console.log(previews);
@@ -157,7 +158,8 @@ router.get('/created', async (req, res) => {
                 title: item.name,
                 created_date: item.date,
                 _id: item._id,
-                isPublic: item.isPublic
+                isPublic: item.isPublic,
+                creator: item.creator.name
             }
         });
 
@@ -191,7 +193,8 @@ router.get('/saved', async (req, res) => {
                 title: item.name,
                 created_date: item.date,
                 _id: item._id,
-                isPublic: item.isPublic
+                isPublic: item.isPublic,
+                creator: item.creator.name
             }
         });
 
