@@ -2,16 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams, Link } from 'react-router-dom';
 import WordDefElem from '../components/WordDefElem';
 
-//TODO:
-    // - New frontend page that is based on the pre-existing create crossword page…
-    //     - Call GET crossword/edit
-    //     - Load all the pre-existing information into the respective forms to edit by the user
-    //     - Create crossword button should now route to POST crossword/edit in order to ensure the pre-existing thing is deleted
-
 function EditCrossword() {
     const { id } = useParams();
-    const [crosswordID, setCrosswordID] = useState(id)
-    const [crossword, setCrossword] = useState('')
     const [title, setTitle] = useState('');
     const [words, setWords] = useState([{ term: '', definition: '' , index: null}]);
     const [error, setError] = useState('');
@@ -19,9 +11,8 @@ function EditCrossword() {
     useEffect(() => {
     async function fetchCrossword() {
         try {
-            const response = await fetch(`/crosswords/${crosswordID}`);
+            const response = await fetch(`/crosswords/${id}`);
             const data = await response.json();
-            setCrossword(data);
             setTitle(data.name || '');
             const existingWords = data.entries.map((entry, idx) => ({
                 term: entry.solution,
@@ -34,7 +25,7 @@ function EditCrossword() {
         }
     }
     fetchCrossword();
-    }, [crosswordID]);
+    }, [id]);
     
     const navigate = useNavigate();
 
@@ -69,7 +60,14 @@ function EditCrossword() {
             return;
         }
         try {
-            const response = await fetch('/crosswords/create', {
+            const deleteRes= await fetch(`/crosswords/${id}`, {
+                method: 'DELETE',
+            });
+            if (!deleteRes.ok) {
+                throw new Error('Failed to delet original crossword');
+            }
+
+            const response = await fetch(`/crosswords/create`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
