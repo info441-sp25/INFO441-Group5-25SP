@@ -59,7 +59,13 @@ function ViewCrosswords(){
                             />
                             <p>{new Date(crossword.created_date).toLocaleDateString()}</p>
                             <div className="actionLinks">
-                                <Link to={'/EditCrossword'} className="actionLink">Edit</Link>
+                                <Link
+                                    to={`/editcrossword/${crossword._id}`}
+                                    className="actionLink"
+                                    onClick={e => e.stopPropagation()}
+                                >
+                                    Edit
+                                </Link>                                
                                 <Link to={null} className="actionLink">Delete</Link>
                             </div>
                         </div>

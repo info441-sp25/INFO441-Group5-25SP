@@ -8,37 +8,33 @@ import WordDefElem from '../components/WordDefElem';
     //     - Load all the pre-existing information into the respective forms to edit by the user
     //     - Create crossword button should now route to POST crossword/edit in order to ensure the pre-existing thing is deleted
 
-function EditCrossword({user, id}) {
+function EditCrossword() {
+    const { id } = useParams();
     const [crosswordID, setCrosswordID] = useState(id)
     const [crossword, setCrossword] = useState('')
     const [title, setTitle] = useState('');
-    const [words, setWords] = useState([{ term: '', definition: '' }]);
+    const [words, setWords] = useState([{ term: '', definition: '' , index: null}]);
     const [error, setError] = useState('');
 
     useEffect(() => {
-        async function fetchCrossword() { //todo: needs a matching user check
-            try {
-                const response = await fetch(`/crosswords/${crosswordID}`)
-                const data = await response.json();
-                setCrossword(data)
-            } catch (error) {
-                console.log("Error: " + error)
-            }
+    async function fetchCrossword() {
+        try {
+            const response = await fetch(`/crosswords/${crosswordID}`);
+            const data = await response.json();
+            setCrossword(data);
+            setTitle(data.name || '');
+            const existingWords = data.entries.map((entry, idx) => ({
+                term: entry.solution,
+                definition: entry.clue ? entry.clue.replace(/\s*\(.*\)$/, '') : '',
+                index: idx
+            }));
+            setWords(existingWords.length > 0 ? existingWords : [{ term: '', definition: '', index: null }]);
+        } catch (error) {
+            console.log("Error: " + error);
         }
-        fetchCrossword()
-        setTitle(crossword.name);
-        const existingWords = [];
-        let counter = 0;
-        crossword.entries.map((entry) => {
-            const result = ({
-                    term: entry.solution,
-                    definition: entry.clue.substring(0, (entry.clue.indexOf('(') - 1)),
-                    index: counter
-                })
-            counter++
-            return result
-        })
-    })
+    }
+    fetchCrossword();
+    }, [crosswordID]);
     
     const navigate = useNavigate();
 
@@ -72,7 +68,6 @@ function EditCrossword({user, id}) {
             setError('Please add at least one word and definition');
             return;
         }
-
         try {
             const response = await fetch('/crosswords/create', {
                 method: 'POST',
@@ -102,7 +97,7 @@ function EditCrossword({user, id}) {
 
     return (
         <div className="createCrosswordContainer">
-            <h1>Create a New Crossword</h1>
+            <h1>Edit Crossword Crossword</h1>
             
             <form onSubmit={handleSubmit}>
                 <div className="createCrosswordForm">
@@ -144,7 +139,7 @@ function EditCrossword({user, id}) {
                 )}
 
                 <button type="submit" className="submitButton">
-                    Create Crossword
+                    Edit Crossword
                 </button>
             </form>
         </div>
