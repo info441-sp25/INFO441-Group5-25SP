@@ -4,24 +4,23 @@ import WordDefElem from '../components/WordDefElem';
 
 function CreateCrossword({ user }) {
     const [title, setTitle] = useState('');
-    const [words, setWords] = useState([{ term: '', definition: '' }]);
+    const [words, setWords] = useState([{ id: Date.now() + Math.random(), term: '', definition: '' }]);
     const [error, setError] = useState('');
     
     const navigate = useNavigate();
 
     const addWordPair = () => {
-        setWords([...words, { term: '', definition: '' }]);
+        setWords([...words, { id: Date.now() + Math.random(), term: '', definition: '' }]);
     };
 
-    const removeWordPair = (index) => {
-        const newWords = words.filter((_, i) => i !== index);
-        setWords(newWords);
+    const removeWordPair = (id) => {
+        setWords(words.filter(word => word.id !== id));
     };
 
-    const updateWordPair = (index, field, value) => {
-        const newWords = [...words];
-        newWords[index][field] = value;
-        setWords(newWords);
+    const updateWordPair = (id, field, value) => {
+        setWords(words.map(word =>
+            word.id === id ? { ...word, [field]: value } : word
+        ));
     };
 
     const handleSubmit = async (e) => {
@@ -90,7 +89,7 @@ function CreateCrossword({ user }) {
                     <h3>Words and Definitions</h3>
                     {words.map((word, index) => (
                         <WordDefElem
-                            key={index}
+                            key={word.id}
                             word={word}
                             index={index}
                             onUpdate={updateWordPair}

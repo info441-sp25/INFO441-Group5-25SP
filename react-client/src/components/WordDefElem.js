@@ -1,37 +1,37 @@
 import React from 'react';
 
-function WordDefElem({ word, index, onUpdate, onRemove, canRemove }) {
+function WordDefElem({ word, onUpdate, onRemove, canRemove }) {
     return (
         <div className="wordDefContainer">
             <div className="wordDefRow">
                 <div className="wordInputContainer">
-                    <label htmlFor={`term${index}`} className="createCrosswordLabel">
+                    <label htmlFor={`term${word.id}`} className="createCrosswordLabel">
                         Word:
                     </label>
                     <input
                         type="text"
-                        id={`term${index}`}
+                        id={`term${word.id}`}
                         value={word.term}
-                        onChange={(e) => onUpdate(index, 'term', e.target.value)}
+                        onChange={(e) => onUpdate(word.id, 'term', e.target.value)}
                         className="createCrosswordInput"
                         placeholder="Enter a word"
                     />
                 </div>
                 <div className="definitionInputContainer">
-                    <label htmlFor={`definition${index}`} className="createCrosswordLabel">
+                    <label htmlFor={`definition${word.id}`} className="createCrosswordLabel">
                         Definition:
                     </label>
                     <input
                         type="text"
-                        id={`definition${index}`}
+                        id={`definition${word.id}`}
                         value={word.definition}
-                        onChange={(e) => onUpdate(index, 'definition', e.target.value)}
+                        onChange={(e) => onUpdate(word.id, 'definition', e.target.value)}
                         className="createCrosswordInput"
                         placeholder="Enter the definition"
                     />
                 </div>
                 {canRemove && (
-                    <button type="button" onClick={() => onRemove(index)} className="removeWordButton">
+                    <button type="button" onClick={() => onRemove(word.id)} className="removeWordButton">
                         Remove
                     </button>
                 )}

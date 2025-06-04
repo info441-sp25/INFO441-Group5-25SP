@@ -5,7 +5,7 @@ import WordDefElem from '../components/WordDefElem';
 function EditCrossword() {
     const { id } = useParams();
     const [title, setTitle] = useState('');
-    const [words, setWords] = useState([{ term: '', definition: '' , index: null}]);
+    const [words, setWords] = useState([{ id: Date.now() + Math.random(), term: '', definition: '' }]);
     const [error, setError] = useState('');
 
     useEffect(() => {
@@ -14,12 +14,12 @@ function EditCrossword() {
             const response = await fetch(`/crosswords/${id}`);
             const data = await response.json();
             setTitle(data.name || '');
-            const existingWords = data.entries.map((entry, idx) => ({
+            const existingWords = data.entries.map((entry) => ({
+                id: Date.now() + Math.random(), // assign a unique id
                 term: entry.solution,
-                definition: entry.clue ? entry.clue.replace(/\s*\(.*\)$/, '') : '',
-                index: idx
+                definition: entry.clue ? entry.clue.replace(/\s*\(.*\)$/, '') : ''
             }));
-            setWords(existingWords.length > 0 ? existingWords : [{ term: '', definition: '', index: null }]);
+            setWords(existingWords.length > 0 ? existingWords : [{ id: Date.now() + Math.random(), term: '', definition: '' }]);
         } catch (error) {
             console.log("Error: " + error);
         }
@@ -30,18 +30,22 @@ function EditCrossword() {
     const navigate = useNavigate();
 
     const addWordPair = () => {
-        setWords([...words, { term: '', definition: '' }]);
+        const lastWord = words[words.length - 1];
+        if (!lastWord.term.trim() || !lastWord.definition.trim()) {
+            setError('Please fill out the current word and definition before adding another.');
+            return;
+        }
+        setWords([...words, { id: Date.now() + Math.random(), term: '', definition: '' }]);
     };
 
-    const removeWordPair = (index) => {
-        const newWords = words.filter((_, i) => i !== index);
-        setWords(newWords);
+    const removeWordPair = (id) => {
+        setWords(words.filter(word => word.id !== id));
     };
 
-    const updateWordPair = (index, field, value) => {
-        const newWords = [...words];
-        newWords[index][field] = value;
-        setWords(newWords);
+    const updateWordPair = (id, field, value) => {
+        setWords(words.map(word =>
+            word.id === id ? { ...word, [field]: value } : word
+        ));
     };
 
     const handleSubmit = async (e) => {
@@ -64,18 +68,19 @@ function EditCrossword() {
                 method: 'DELETE',
             });
             if (!deleteRes.ok) {
-                throw new Error('Failed to delet original crossword');
+                throw new Error('Failed to delete original crossword');
             }
-
+            console.log(deleteRes)
+            console.log("valid words: " + validWords.stringify)
             const response = await fetch(`/crosswords/create`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    data: {
-                        title: title,
-                        words: validWords
+                data: {
+                    title: title,
+                    words: validWords 
                     }
                 })
             });
@@ -83,6 +88,7 @@ function EditCrossword() {
             if (!response.ok) {
                 throw new Error('Failed to create crossword');
             }
+            console.log(response)
 
             const data = await response.json();
             navigate(`/rendercrosswords/${data.id}`);
@@ -116,7 +122,7 @@ function EditCrossword() {
                     <h3>Words and Definitions</h3>
                     {words.map((word, index) => (
                         <WordDefElem
-                            key={index}
+                            key={word.id}
                             word={word}
                             index={index}
                             onUpdate={updateWordPair}
