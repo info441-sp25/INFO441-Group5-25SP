@@ -202,6 +202,32 @@ router.get('/saved', async (req, res) => {
     }
 });
 
+router.get('/search', async(req, res) => {
+    try {
+        const search = req.query.search;
+        console.log(search);
+        const crosswords = await req.models.Crossword.find({name: { $regex: search, $options: 'i' }});
+
+        if (!crosswords) {
+            return res.status(200).json([]);
+        }
+
+        const data = crosswords.map(item => {
+            return {
+                title: item.name,
+                created_date: item.date,
+                _id: item._id,
+                isPublic: item.isPublic
+            }
+        });
+
+        res.status(200).json(data);
+    } catch(err) {
+        console.log("Error in /search:", err);
+        res.status(500).json({status: "error", error: "error searching crossword"});
+    }
+})
+
 router.get('/:id', async (req, res) => {
     try {
         console.log("i made it to backend: " + req.params.id)
@@ -217,5 +243,7 @@ router.get('/:id', async (req, res) => {
         res.status(500).json({status: "error", error: "error fetching crossword"});
     }
 });
+
+
 
 export default router

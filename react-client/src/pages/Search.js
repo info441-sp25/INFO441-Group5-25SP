@@ -1,26 +1,37 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
-function ViewCrosswords(){
+function Search() {
     const[crosswords, setCrosswords] = useState([]);
+    const[query, setQuery] = useState('');
     const navigate = useNavigate();
-    const { user } = useParams();
-
+    
     useEffect(() => {
+        if (!query) return;
         async function fetchCrosswords() {
             try {
-                const response = await fetch(`/crosswords/created?user=${user}`);
+                const response = await fetch(`/crosswords/search?search=${query}`);
                 const data = await response.json();
                 setCrosswords(data)
             } catch(err) {
                 console.log(err)
+                alert('Error fetching crosswords.');
+
             }  
         }
         fetchCrosswords()
-    }, [user])
-    
+    }, [query])
+
+    function handleSubmit(e) {
+        e.preventDefault();
+        const inputValue = e.target.elements.searchInput.value;
+        setQuery(inputValue);
+    }
+
     return (
         <div>
+            
+        
             <div
                 style={{
                     display: 'flex',
@@ -29,7 +40,7 @@ function ViewCrosswords(){
                 }}
             >
                 {crosswords.length === 0 ? (
-                    <p>No crosswords to display.</p>
+                    <p>No crosswords yet, start searching.</p>
                 ) : (
                     crosswords.map((crossword) => (
                         <div 
@@ -42,7 +53,7 @@ function ViewCrosswords(){
                                 cursor: 'pointer'
                             }}
                         >
-                            <p>{crossword.title || 'Crossword'}</p>
+                            <h3>{crossword.title || 'Crossword'}</h3>
                             <img 
                                 src="/preview_image.png" 
                                 alt="crossword preview"
@@ -56,9 +67,17 @@ function ViewCrosswords(){
                         </div>
                     ))   
                 )}
-            </div>  
-        </div>   
-    )
 
+            </div>   
+            <form id="search-form" onSubmit={handleSubmit}>
+                <input type="text" name="searchInput" placeholder="Search..."/>
+                <button type="submit">Go</button>
+            </form>
+        </div>
+
+    )
 }
-export default ViewCrosswords;
+
+export default Search;
+
+

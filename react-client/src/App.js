@@ -10,6 +10,7 @@ import RenderCrosswordPage from './pages/RenderCrosswordPage.js'
 import ViewCrosswords from './pages/ViewCrosswords.js';
 import Header from './components/header.js';
 import CreateCrossword from './pages/CreateCrossword.js';
+import Search from './pages/Search.js';
 
 function App() {
 	const [user, setUser] = useState(null);
@@ -48,6 +49,9 @@ function App() {
 
 			<Route path='/viewcrosswords/user/:user' element={<ViewCrosswords />}/>
 
+			{/* Needs to come before rendercrossowrds */}
+			<Route path="/search" element={<Search/>} />
+
         	<Route path='/rendercrosswords/:id' element={<RenderCrosswordPage/>}/>
 	
 			{/* <Route path='' element={<RenderCrosswordPage />}/> */}
@@ -55,7 +59,7 @@ function App() {
 			{/* <Route path='rendercrossword/:crosswordID' element={<RenderCrossword crosswordID={crosswordID}/>}/> */}
 
 			<Route path='/createcrossword' element={<CreateCrossword user={ user }/>}/>
-			
+
 			<Route path="*" element={<Form setcrosswordID={setcrosswordID} user={user} />}/>
 	
 		  </Routes>
