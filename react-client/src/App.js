@@ -11,6 +11,7 @@ import ViewCrosswords from './pages/ViewCrosswords.js';
 import Header from './components/header.js';
 import CreateCrossword from './pages/CreateCrossword.js';
 import SearchCrosswords from './pages/SearchCrosswords.js';
+import EditCrossword from './pages/EditCrossword.js';
 
 function App() {
 	const [user, setUser] = useState(null);
@@ -57,6 +58,8 @@ function App() {
 				<Route path='/createcrossword' element={<CreateCrossword user={ user }/>}/>
 
 				<Route path="*" element={<Form setcrosswordID={setcrosswordID} user={user} />}/>
+
+				<Route path="/editcrossword/:id" element={<EditCrossword />} />
 			</Routes>
 		</BrowserRouter>
 	);

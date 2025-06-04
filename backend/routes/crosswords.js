@@ -234,9 +234,7 @@ router.get('/search/:search', async(req, res) => {
 
 router.get('/:id', async (req, res) => {
     try {
-        console.log("i made it to backend: " + req.params.id)
         const crossword = await req.models.Crossword.findById(req.params.id);
-        console.log("i got a crossword? " + crossword)
         if (!crossword) {
             res.status(404).json({status: "error", error: "crossword not found"});
             return;
@@ -247,22 +245,6 @@ router.get('/:id', async (req, res) => {
         res.status(500).json({status: "error", error: "error fetching crossword"});
     }
 });
-
-
-router.get('/edit', async (req, res) => {
-    //     - Needs to check that crossword matches the user’s ownership
-    // - Needs to call for the crossword in question
-    // - Needs to scrape for the following details:
-    //     - objectID
-    //     - Title
-    //     - All words in word+definiton pairs
-    // - res.status(200).json(resulted)
-})
-
-router.post('/edit', async (req, res) => {
-    // - Will delete the pre-existing crossword of the same objectID
-    // - Create a new crossword using the existing POST crossword/create
-})
 
 // DELETE /crosswords/:id
 router.delete('/:id', async (req, res) => {
