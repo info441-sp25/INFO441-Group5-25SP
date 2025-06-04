@@ -45,13 +45,7 @@ function ViewCrosswords(){
 
     return (
         <div>
-            <div
-                style={{
-                    display: 'flex',
-                    gap:'1rem',
-                    alignItems: 'center'
-                }}
-            >
+            <div className='card-grid'>
                 {crosswords.length === 0 ? (
                     <p>No crosswords to display.</p>
                 ) : (
@@ -59,24 +53,12 @@ function ViewCrosswords(){
                         <div 
                             key={crossword._id} 
                             onClick={() => navigate(`/rendercrosswords/${crossword._id}`)}
-                            style={{
-                                display: 'flex',
-                                flexDirection: 'column',
-                                padding: '1rem',
-                                cursor: 'pointer'
-                            }}
+                            class="crossword-card"
                         >
-                            <p>{crossword.title || 'Crossword'}</p>
-                            <img 
-                                src="/preview_image.png" 
-                                alt="crossword preview"
-                                style={{
-                                    width: '8rem',
-                                    height: '8rem',
-                                    objectFit: 'cover'
-                                }} 
-                            />
-                            <p>{new Date(crossword.created_date).toLocaleDateString()}</p>
+                            <h3 className='card-title'>{crossword.title || 'Crossword'}</h3>
+                            <img src="/preview_image.png" alt="crossword preview" class='card-image' />
+                            <p className='card-date'>{new Date(crossword.created_date).toLocaleDateString()}</p>
+                            <p className='card-date'>Created By: {crossword.creator || 'Anonymous'}</p>
                             <div className="actionLinks" style={{ marginTop: '0.5rem' }}>
                                 <Link to={`/editcrossword/${crossword._id}`} className="actionLink">Edit</Link>
                                 <button

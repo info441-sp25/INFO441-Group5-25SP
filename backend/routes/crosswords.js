@@ -202,9 +202,10 @@ router.get('/saved', async (req, res) => {
     }
 });
 
-router.get('/search', async(req, res) => {
+router.get('/search/:search', async(req, res) => {
+    console.log("im in search", req.params.search);
     try {
-        const search = req.query.search;
+        const search = req.params.search;
         console.log(search);
         const crosswords = await req.models.Crossword.find({name: { $regex: search, $options: 'i' }});
 
@@ -217,7 +218,7 @@ router.get('/search', async(req, res) => {
                 title: item.name,
                 created_date: item.date,
                 _id: item._id,
-                isPublic: item.isPublic
+                creator: item.creator.name
             }
         });
 
