@@ -1,7 +1,0 @@
-{
-  "dependencies": {
-    "@azure/msal-node": "^3.5.3",
-    "express-session": "^1.18.1",
-    "mongoose": "^8.15.1"
-  }
-}
