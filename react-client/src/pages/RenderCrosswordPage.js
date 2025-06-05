@@ -147,8 +147,8 @@ function RenderCrosswordPage() {
   return (
     <div style={{ maxWidth: '500px', margin: '0 auto', paddingTop: '80px' }}>
       <h1>{crosswordData.name}</h1>
-      {/* <Crossword data={crosswordData} /> */}
-      <Crossword data={crosswordWithoutSolutions} />
+      <Crossword data={crosswordData} />
+      {/* <Crossword data={crosswordWithoutSolutions} /> */}
     </div>
   );
 }
