@@ -32,30 +32,32 @@ function CreateCrossword({ user }) {
         setError('');    
         setWarning('');
 
-
         if (!title.trim()) {
             setError('Please enter a title for your crossword');
             return;
         }
-
-        const validWords = words.filter(word => word.term.trim() && word.definition.trim());
-
-        if (validWords.length <= 1) {
-            setError('Please add at least two words and definitions.');
-            return;
-        }
-
-        const imcompleteWords = words.filter(word => !word.term.trim() || !word.definition.trim());
-        
-        if (imcompleteWords.length > 0) {
+    
+        const validWords = words.map(word => ({
+            id: word.id,
+            term: word.term.trim(),
+            definition: word.definition.trim()
+        }));
+    
+        const incompleteWords = validWords.filter(word => !word.term || !word.definition);
+        if (incompleteWords.length > 0) {
             setError('All words must have both a term and a definition.');
             return;
         }
-
-        const tooShort = validWords.find(word => word.term.trim().length <= 1);
-
+    
+        if (validWords.length < 2) {
+            setError('Please add at least two words and definitions.');
+            return;
+        }
+    
+        const tooShort = validWords.find(word => word.term.length <= 1);
         if (tooShort) {
             setError('All terms must be at least 2 letters long.');
+            return;
         }
         
         try {
