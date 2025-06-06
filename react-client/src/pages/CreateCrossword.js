@@ -34,12 +34,14 @@ function CreateCrossword({ user }) {
             return;
         }
 
-        const validWords = words.filter(word => word.term.trim() && word.definition.trim());
-
-        if (validWords.length === 0) {
-            setError('Please add at least one word and definition');
+        const imcompleteWords = words.filter(word => !word.term.trim() || !word.definition.trim());
+        
+        if (imcompleteWords.length > 0) {
+            setError('Please fill in all fields for each word');
             return;
         }
+
+        const validWords = words.filter(word => word.term.trim() && word.definition.trim());
 
         try {
             const response = await fetch('/crosswords/create', {
