@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 
 function SearchCrosswords() {
     const[crosswords, setCrosswords] = useState([]);
+    const [error, setError] = useState('');
     const { search } = useParams();
     const navigate = useNavigate();
     
@@ -10,11 +11,16 @@ function SearchCrosswords() {
         if (!search) return;
         async function fetchCrosswords() {
             try {
-                const response = await fetch(`/crosswords/search/${search}`);                
-                const data = await response.json();
+                const response = await fetch(`/crosswords/search/${search}`); 
+                if (!response.ok) {
+                    setError("Failed to fetch crossword(s).");
+                    return;
+                }    
+                const data = await response.json();            
                 setCrosswords(data)
             } catch(err) {
-                console.log(err)
+                setError('Failed to fetch crossword(s)');
+                console.error('Error fetching crosswords:', error);
             }  
         }
         fetchCrosswords()
@@ -24,7 +30,11 @@ function SearchCrosswords() {
     return (
         <div>
             <div className='card-grid'>
-                {crosswords.length === 0 ? (
+                {error ? (
+                    <div className="errorMessage">
+                        {error}
+                    </div>
+                ) : crosswords.length === 0 ? (
                     <p>No crosswords yet, start searching.</p>
                 ) : (
                     crosswords.map((crossword) => (
