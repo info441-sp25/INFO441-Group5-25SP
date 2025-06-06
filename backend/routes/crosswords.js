@@ -24,6 +24,18 @@ router.post('/create', async (req, res) => {
             return word.orientation !== 'none'
         })
 
+        const filteredEntries = crosswordLayout.result.filter(word => {
+            return word.orientation == 'none'
+        }).map(word => {
+            return word.answer
+        })
+
+        if(crosswordLayout.result.length == filteredEntries.length) {
+            console.log("Session:", req.session);
+            res.status(401).json({status: "error", error: "all words were filtered"})
+            return
+        }
+
         const username = req.session.account.username
         const user = await req.models.User.findOne({username}) ; 
         const number = (user?.createdCrosswords?.length || 0) + 1;
@@ -62,6 +74,7 @@ router.post('/create', async (req, res) => {
             },
             crosswordType: 'quick',
             pdf: null,
+            filteredEntries: filteredEntries
         }
 
         const newCrossword = new req.models.Crossword({
@@ -93,6 +106,7 @@ router.post('/create', async (req, res) => {
 
         crosswordData.id = newCrossword._id;
         
+        console.log(crosswordData.filteredEntries);
         res.status(200).json(crosswordData);
     } catch(err) {
         console.log("Error: ", err);

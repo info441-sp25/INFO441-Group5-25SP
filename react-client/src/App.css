@@ -319,20 +319,17 @@
 .card-grid {
   display: flex;
   flex-wrap: wrap;        
-  gap: 1rem;  
-  margin: 7rem 2rem 7rem 2rem;           
-  justify-content: start; 
+  gap: 4rem;  
+  margin-top: 8rem;
+  justify-content: center; 
 }
 
 .crossword-card {
-  background-color: #fff;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
   cursor: pointer;
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  gap: 1rem;
   transition: transform 0.15s ease, box-shadow 0.15s ease;
   width: 200px;           
 }
@@ -344,15 +341,13 @@
 
 .card-title {
   font-size: 1.1rem;
-  font-weight: 500;
-  margin: 0.75rem 0 0.5rem;
-  padding: 0 0.75rem;
+  font-weight: bold;
   color: #333;
-  text-align: center;
+  text-align: start;
+  margin: 0;
 }
 
 .card-image {
-  height: 120px;      
   object-fit: cover;  
   width: 100%;
 }
@@ -360,7 +355,6 @@
 .card-date {
   font-size: 0.85rem;
   color: #666;
-  margin: 0.5rem 0 1rem;
-  padding: 0 0.75rem;
-  text-align: center;
+  text-align: start;
+  margin: 0;
 }

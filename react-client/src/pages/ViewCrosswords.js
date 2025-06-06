@@ -5,6 +5,7 @@ function ViewCrosswords({currentUser}){
     const[crosswords, setCrosswords] = useState([]);
     const navigate = useNavigate();
     const { user } = useParams();
+    const [error, setError] = useState('');
     const currentUsername = (currentUser ? (currentUser.username) : '')
 
     useEffect(() => {
@@ -12,9 +13,14 @@ function ViewCrosswords({currentUser}){
             try {
                 const response = await fetch(`/crosswords/created?user=${user}`);
                 const data = await response.json();
+                if (!response.ok) {
+                    setError("Failed to fetch crossword(s).");
+                    return;
+                }
                 setCrosswords(data)
             } catch(err) {
-                console.log(err)
+                setError('Failed to fetch crossword(s)');
+                console.error('Error fetching crosswords:', error);
             }  
         }
         fetchCrosswords()
@@ -40,14 +46,14 @@ function ViewCrosswords({currentUser}){
         }
     }
     
-    // TODO: get the crossword preview to have a button for edit
-        // - Need to edit the viewcrosswords/user page to show an “edit” button for each crossword
-        // - Links to new page below
-
     return (
         <div>
             <div className='card-grid'>
-                {crosswords.length === 0 ? (
+                {error ? (
+                    <div className="errorMessage">
+                        {error}
+                    </div>
+                ) : crosswords.length === 0 ? (
                     <p>No crosswords to display.</p>
                 ) : (
                     crosswords.map((crossword) => (
@@ -55,13 +61,6 @@ function ViewCrosswords({currentUser}){
                             key={crossword._id} 
                             className="crossword-card"
                         >
-                            <h3
-                                className='card-title'
-                                style={{ cursor: 'pointer' }}
-                                onClick={() => navigate(`/rendercrosswords/${crossword._id}`)}
-                            >
-                                {crossword.title || 'Crossword'}
-                            </h3>
                             <img
                                 src="/preview_image.png"
                                 alt="crossword preview"
@@ -69,6 +68,13 @@ function ViewCrosswords({currentUser}){
                                 style={{ cursor: 'pointer' }}
                                 onClick={() => navigate(`/rendercrosswords/${crossword._id}`)}
                             />
+                            <h3
+                                className='card-title'
+                                style={{ cursor: 'pointer' }}
+                                onClick={() => navigate(`/rendercrosswords/${crossword._id}`)}
+                            >
+                                {crossword.title || 'Crossword'}
+                            </h3>
                             <p className='card-date'>{new Date(crossword.created_date).toLocaleDateString()}</p>
                             <p className='card-date'>Created By: {crossword.creator || 'Anonymous'}</p>
                             {crossword.creator == currentUsername ? (

@@ -6,6 +6,8 @@ function CreateCrossword({ user }) {
     const [title, setTitle] = useState('');
     const [words, setWords] = useState([{ id: Date.now() + Math.random(), term: '', definition: '' }]);
     const [error, setError] = useState('');
+    const [warning, setWarning] = useState('');
+
     
     const navigate = useNavigate();
 
@@ -27,17 +29,32 @@ function CreateCrossword({ user }) {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setError('');
+        setError('');    
+        setWarning('');
+
 
         if (!title.trim()) {
             setError('Please enter a title for your crossword');
             return;
         }
 
-        const validWords = words.filter(word => word.term.trim() && word.definition.trim());
+        const validWords = words.filter(word => {
+            return word.term.trim() !== '' && word.definition.trim() !== '';
+        });
 
         if (validWords.length === 0) {
-            setError('Please add at least one word and definition');
+            setError('Please add at least one word and definition.');
+            return;
+        }
+
+        if (validWords.length !== words.length) {
+            setError('All words must have both a term and a definition.');
+            return;
+        }
+
+        const tooShort = validWords.find(word => word.term.trim().length <= 1);
+        if (tooShort) {
+            setError('All terms must be at least 2 letters long.');
             return;
         }
 
@@ -55,13 +72,31 @@ function CreateCrossword({ user }) {
                 })
             });
 
+            const data = await response.json();
+            
             if (!response.ok) {
-                throw new Error('Failed to create crossword');
+                if (data.error === "not logged in") {
+                    setError("Please sign in to create a crossword.");
+                } else if (data.error === "all words were filtered") {
+                    setError("💡 Oops! We couldn’t place some of your words into the puzzle. Crossword grids require words to share at least one letter with others.");
+                } else {
+                    setError("Failed to create crossword.");
+                }
+                return;
+                // throw new Error('Failed to create crossword');
             }
 
-            const data = await response.json();
-            navigate(`/rendercrosswords/${data.id}`);
-
+            if (data.filteredEntries && data.filteredEntries.length > 0) {
+                const message = `❌ Could not include: ${data.filteredEntries.join(', ')}`;
+                setWarning(message);            
+                setTimeout(() => setWarning(''), 5000); 
+                setTimeout(() => {
+                    navigate(`/rendercrosswords/${data.id}`);
+                }, 1000);
+            } else {
+                navigate(`/rendercrosswords/${data.id}`);
+            }
+    
         } catch (error) {
             setError('Failed to create crossword. Please try again.');
             console.error('Error creating crossword:', error);
@@ -106,9 +141,15 @@ function CreateCrossword({ user }) {
                 </div>
 
                 {error && (
-                    <div className="errorMessage">
+                    <div className="errorSection">
                         {error}
                     </div>
+                )}
+
+                {warning && (
+                <div className='errorSection'>
+                    {warning}
+                </div>
                 )}
 
                 <button type="submit" className="submitButton">

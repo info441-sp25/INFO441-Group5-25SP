@@ -33,8 +33,8 @@ function SearchCrosswords() {
                             onClick={() => navigate(`/rendercrosswords/${crossword._id}`)}
                             class="crossword-card"
                         >
-                            <h3 className='card-title'>{crossword.title || 'Crossword'}</h3>
                             <img src="/preview_image.png" alt="crossword preview" class='card-image' />
+                            <h3 className='card-title'>{crossword.title || 'Crossword'}</h3>
                             <p className='card-date'>{new Date(crossword.created_date).toLocaleDateString()}</p>
                             <p className='card-date'>Created By: {crossword.creator || 'Anonymous'}</p>
                         </div>
