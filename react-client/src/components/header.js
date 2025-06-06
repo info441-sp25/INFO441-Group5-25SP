@@ -29,7 +29,7 @@ function Header() {
   return (
     <div className="headerContainer">
       <div className="headerLeftLinks">
-        <Link to={'/'} className="actionLink">Crossly</Link>
+        <Link to={'/'} className="actionLink icon"><img src="/crossly.png"/></Link>
         <Link to={'/form'} className="actionLink">Welcome Page</Link>
           {username ? (
             <Link to={'/createcrossword'} className="actionLink">Create New Crossword</Link> 

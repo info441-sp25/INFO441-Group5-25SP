@@ -124,32 +124,6 @@ router.get('/', async (req, res) => {
     }
 });
 
-router.get('/user', async (req, res) => {
-    try {
-        const username = req.query.user
-
-        const user = await req.models.User.findOne({'username': username}).populate('savedCrosswords')
-
-        if (!user) {
-            return res.status(200).json([]);
-        } else {
-            const previews = user.savedCrosswords.map(item => {
-                return {
-                    title: item.name,
-                    created_date: item.date,
-                    _id: item._id,
-                    creator: item.creator.name
-                }
-            })
-            console.log(previews);
-            res.status(200).json(previews);
-        }
-    } catch(err) {
-        console.log(err);
-        res.status(500).json({status: "error", error: "error in /user"})
-    }
-})
-
 router.get('/created/:username', async (req, res) => {
     try {
         const username = req.params.username;

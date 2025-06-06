@@ -138,6 +138,10 @@
   border-radius: 6px;
   text-align: center;
   transition: background-color 0.2s;
+  height: 1.3rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .actionLink:hover {
@@ -358,3 +362,15 @@
   text-align: start;
   margin: 0;
 }
+
+.actionLink img {
+  height: 2.5rem;
+}
+
+.actionLink.icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: transparent;
+}
+
