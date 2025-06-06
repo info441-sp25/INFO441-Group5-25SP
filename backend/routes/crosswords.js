@@ -31,7 +31,6 @@ router.post('/create', async (req, res) => {
         })
 
         if(crosswordLayout.result.length == filteredEntries.length) {
-            console.log("Session:", req.session);
             res.status(401).json({status: "error", error: "all words were filtered"})
             return
         }
@@ -140,7 +139,7 @@ router.get('/created/:username', async (req, res) => {
 
         const crosswords = await req.models.Crossword.find({
             _id: { $in: user.createdCrosswords }
-        });
+        }).sort({ date: -1 });
 
         const data = crosswords.map(item => {
             return {
@@ -175,7 +174,7 @@ router.get('/saved/:username', async (req, res) => {
 
         const crosswords = await req.models.Crossword.find({
             _id: { $in: user.savedCrosswords }
-        });
+        }).sort({ date: -1 });
 
         const data = crosswords.map(item => {
             return {
@@ -199,7 +198,7 @@ router.get('/search/:search', async(req, res) => {
     try {
         const search = req.params.search;
         console.log(search);
-        const crosswords = await req.models.Crossword.find({name: { $regex: search, $options: 'i' }});
+        const crosswords = await req.models.Crossword.find({name: { $regex: search, $options: 'i' }}).sort({ date: -1 });;
 
         if (!crosswords) {
             return res.status(200).json([]);
