@@ -13,7 +13,7 @@ function LogIn({user}) {
     return (
         <div className="loginContainer">
             <div className="loginCard">
-                <h1 className="loginTitle">Crossword app</h1>
+                <h1 className="loginTitle">Crossly</h1>
                 <p className="loginSubtitle">Create and solve crosswords with ease</p>
                 {user ? (
                     <button className="loginButton logout" onClick={handleLogout}>

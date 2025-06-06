@@ -38,26 +38,26 @@ function CreateCrossword({ user }) {
             return;
         }
 
-        const validWords = words.filter(word => {
-            return word.term.trim() !== '' && word.definition.trim() !== '';
-        });
+        const validWords = words.filter(word => word.term.trim() && word.definition.trim());
 
-        if (validWords.length === 0) {
-            setError('Please add at least one word and definition.');
+        if (validWords.length <= 1) {
+            setError('Please add at least two words and definitions.');
             return;
         }
 
-        if (validWords.length !== words.length) {
+        const imcompleteWords = words.filter(word => !word.term.trim() || !word.definition.trim());
+        
+        if (imcompleteWords.length > 0) {
             setError('All words must have both a term and a definition.');
             return;
         }
 
         const tooShort = validWords.find(word => word.term.trim().length <= 1);
+
         if (tooShort) {
             setError('All terms must be at least 2 letters long.');
-            return;
         }
-
+        
         try {
             const response = await fetch('/crosswords/create', {
                 method: 'POST',

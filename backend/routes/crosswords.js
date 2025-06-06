@@ -56,7 +56,7 @@ router.post('/create', async (req, res) => {
         })
         
         const crosswordData = {
-            id: null,//MongoDB assign on save
+            id: null,
             number: number,
             name: crosswordTitle,
             creator: {
@@ -150,9 +150,9 @@ router.get('/user', async (req, res) => {
     }
 })
 
-router.get('/created', async (req, res) => {
+router.get('/created/:username', async (req, res) => {
     try {
-        const username = req.query.user;
+        const username = req.params.username;
 
         if (!username) {
             return res.status(400).json({status: "error", error: "username parameter required"});
@@ -185,9 +185,9 @@ router.get('/created', async (req, res) => {
     }
 });
 
-router.get('/saved', async (req, res) => {
+router.get('/saved/:username', async (req, res) => {
     try {
-        const username = req.query.user;
+        const username = req.params.username;
 
         if (!username) {
             return res.status(400).json({status: "error", error: "username parameter required"});

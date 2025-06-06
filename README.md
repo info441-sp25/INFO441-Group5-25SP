@@ -1,6 +1,6 @@
 # Project Description
 
-Our application is intended for students who want to learn important class concepts and vocabulary through a fun, interactive experience. We specifically aim to support students who prefer active learning, particularly those who might disengage from lackluster class material. They’ll simply input multiple terms along with their definitions, either manually or by uploading sets from platforms like Quizlet, and we’ll generate a custom crossword puzzle where definitions are clues and terms are answers. 
+Our application is intended for students who want to learn important class concepts and vocabulary through a fun, interactive experience. We specifically aim to support students who prefer active learning, particularly those who might disengage from lackluster class material. They’ll simply input multiple terms along with their definitions, by putting them into a form, and we’ll generate a custom crossword puzzle where definitions are clues and terms are answers. 
 
 Students are already familiar with crossword puzzles, many completing the New York Times daily crossword during class downtime. Our application aims to use that urge for quick brain games and redirect it towards academic success. Rather than spacing out during those long lectures, students can solve puzzles generated from public or personal study sets, making the learning process both unmissable and enjoyable.
 
