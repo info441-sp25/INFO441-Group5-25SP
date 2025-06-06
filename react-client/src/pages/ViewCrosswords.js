@@ -10,7 +10,7 @@ function ViewCrosswords({currentUser}){
     useEffect(() => {
         async function fetchCrosswords() {
             try {
-                const response = await fetch(`/crosswords/created?user=${user}`);
+                const response = await fetch(`/crosswords/created/${user}`);
                 const data = await response.json();
                 setCrosswords(data)
             } catch(err) {
